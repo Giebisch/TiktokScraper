@@ -3,7 +3,7 @@ TiktokScraper
 
 Introduction
 ------------
-Behold My Awesome Project!
+This packages helps you scrape various Tiktok data
 
 Prerequisites
 -------------
