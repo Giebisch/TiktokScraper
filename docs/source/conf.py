@@ -45,8 +45,9 @@ extensions = [
     'sphinx.ext.coverage',
     'sphinx.ext.imgmath',
     'sphinx.ext.viewcode',
+    'sphinxcontrib.httpdomain',
     'sphinx.ext.autosectionlabel',
-    'sphinx.ext.napoleon'
+    'sphinx.ext.napoleon',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -164,7 +165,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
     (master_doc, project, project + ' Documentation',
-     author, project, 'Behold My Awesome Project!',
+     author, project, 'Tiktok scraper',
      'Miscellaneous'),
 ]
 
