@@ -79,7 +79,30 @@
              
   <section id="source">
 <h1>Source<a class="headerlink" href="#source" title="Permalink to this heading"></a></h1>
-<p>get_post_comments()</p>
+<dl class="http get">
+<dt class="sig sig-object http">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/libapi/author/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">author_name</span></em><span class="sig-paren">)</span></dt>
+<dd><blockquote>
+<div><p>Retrieves a list of books written by a specified author.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>string</strong> – author_name (<em>required</em>) – The name the of the particular author</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request Headers<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc7235#section-4.2">Authorization</a></span> – <cite>token</cite></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The author name must be in URL encoded format</p>
+</div>
 </section>
 
 

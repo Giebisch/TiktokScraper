@@ -1,5 +1,14 @@
 Source
 ======
-..
-    List here all modules.
-get_post_comments()
+
+.. http:get:: /libapi/author/(author_name)
+   :noindex:
+   
+     Retrieves a list of books written by a specified author.
+	 
+   :query string:  author_name (*required*) -- The name the of the particular author
+   
+   :requestheader Authorization: `token`
+   
+.. important::
+   The author name must be in URL encoded format
