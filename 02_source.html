@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Source &mdash; TiktokScraper 0.1.0 documentation</title>
+  <title>Source Data &mdash; TiktokScraper 0.1.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -48,7 +48,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="01_about.html">TiktokScraper</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Source</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Source Data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="03_authors.html">Authors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="04_contributing.html">Contributing</a></li>
 </ul>
@@ -67,7 +67,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Source</li>
+      <li class="breadcrumb-item active">Source Data</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/02_source.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -77,23 +77,58 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="source">
-<h1>Source<a class="headerlink" href="#source" title="Permalink to this heading"></a></h1>
+  <section id="source-data">
+<h1>Source Data<a class="headerlink" href="#source-data" title="Permalink to this heading"></a></h1>
+<p>In this section a collection of all the API calls the Tiktok Web App makes will be listed</p>
 <dl class="http get">
 <dt class="sig sig-object http">
-<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/libapi/author/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">author_name</span></em><span class="sig-paren">)</span></dt>
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/</span></span></dt>
 <dd><blockquote>
-<div><p>Retrieves a list of books written by a specified author.</p>
+<div><p>Query Parameters necessary for all types of request</p>
 </div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Query Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>string</strong> – author_name (<em>required</em>) – The name the of the particular author</p></li>
+<li><p><strong>string</strong> – WebIdLastTime (<em>required</em>) –</p></li>
+<li><p><strong>string</strong> – aid (<em>required</em>) –</p></li>
+<li><p><strong>string</strong> – app_lanugage (<em>required</em>) –</p></li>
+<li><p><strong>string</strong> – app_name (<em>required</em>) –</p></li>
+<li><p><strong>string</strong> – aweme_id (<em>required</em>) –</p></li>
+<li><p><strong>string</strong> – browser_language (<em>required</em>) –</p></li>
+<li><p><strong>string</strong> – browser_name (<em>required</em>) –</p></li>
+<li><p><strong>string</strong> – browser_platform (<em>required</em>) –</p></li>
+<li><p><strong>string</strong> – browser_version (<em>required</em>) –</p></li>
+<li><p><strong>string</strong> – channel (<em>required</em>) –</p></li>
+<li><p><strong>string</strong> – cookie_enabled (<em>required</em>) –</p></li>
+<li><p><strong>string</strong> – count (<em>required</em>) –</p></li>
+<li><p><strong>string</strong> – current_region (<em>required</em>) –</p></li>
+<li><p><strong>string</strong> – cursor (<em>required</em>) –</p></li>
+<li><p><strong>string</strong> – device_id (<em>required</em>) –</p></li>
+<li><p><strong>string</strong> – device_platform (<em>required</em>) –</p></li>
+<li><p><strong>string</strong> – enter_from (<em>required</em>) –</p></li>
+<li><p><strong>string</strong> – focus_state (<em>required</em>) –</p></li>
+<li><p><strong>string</strong> – fromWeb (<em>required</em>) –</p></li>
+<li><p><strong>string</strong> – from_page (<em>required</em>) –</p></li>
+<li><p><strong>string</strong> – history_len (<em>required</em>) –</p></li>
+<li><p><strong>string</strong> – is_fullscreen (<em>required</em>) –</p></li>
+<li><p><strong>string</strong> – is_non_personalized (<em>required</em>) –</p></li>
+<li><p><strong>string</strong> – is_page_visible (<em>required</em>) –</p></li>
+<li><p><strong>string</strong> – os (<em>required</em>) –</p></li>
+<li><p><strong>string</strong> – priority_region (<em>required</em>) –</p></li>
+<li><p><strong>string</strong> – referer (<em>required</em>) –</p></li>
+<li><p><strong>string</strong> – region (<em>required</em>) –</p></li>
+<li><p><strong>string</strong> – screen_height (<em>required</em>) –</p></li>
+<li><p><strong>string</strong> – screen_width (<em>required</em>) –</p></li>
+<li><p><strong>string</strong> – tz_name (<em>required</em>) –</p></li>
+<li><p><strong>string</strong> – webcast_language (<em>required</em>) –</p></li>
+<li><p><strong>string</strong> – msToken (<em>required</em>) –</p></li>
+<li><p><strong>string</strong> – _signature (<em>required</em>) –</p></li>
 </ul>
 </dd>
 <dt class="field-even">Request Headers<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc7235#section-4.2">Authorization</a></span> – <cite>token</cite></p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc7235#section-4.2">Authorization</a></span> – <cite>msToken</cite></p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc2109#section-4.3.4">Cookie</a></span> – token from response of last request <cite>X-Ms-Token</cite></p></li>
 </ul>
 </dd>
 </dl>
@@ -101,8 +136,256 @@
 
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>The author name must be in URL encoded format</p>
+<p>It seems like all (or at least most) of the query parameters are necessary</p>
 </div>
+<dl class="http get">
+<dt class="sig sig-object http">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/api/user/detail/</span></span></dt>
+<dd><blockquote>
+<div><p>Get details of user</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>userInfo</strong> (<em>json</em>) – userInfo</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Example response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Vary</span><span class="o">:</span> <span class="l">Accept</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">text/javascript</span>
+
+<span class="p">{</span>
+<span class="w">   </span><span class="s2">&quot;userInfo&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="s2">&quot;stats&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;diggCount&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;followerCount&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">869400</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;followingCount&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">15</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;friendCount&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">5</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;heart&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">14900000</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;heartCount&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">14900000</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;videoCount&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">189</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="s2">&quot;user&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;avatarLarger&quot;</span><span class="o">:</span><span class="w"> </span><span class="o">&lt;</span><span class="nx">link</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;avatarMedium&quot;</span><span class="o">:</span><span class="w"> </span><span class="o">&lt;</span><span class="nx">link</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;avatarThumb&quot;</span><span class="o">:</span><span class="w"> </span><span class="o">&lt;</span><span class="nx">link</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;canExpPlaylist&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;commentSetting&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;commerceUserInfo&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">               </span><span class="s2">&quot;commerceUser&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">            </span><span class="p">},</span>
+<span class="w">            </span><span class="s2">&quot;duetSetting&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;followingVisibility&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;ftc&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="w"> </span><span class="o">&lt;</span><span class="nx">string</span><span class="w"> </span><span class="nx">id</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;isADVirtual&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;isEmbedBanned&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;nickNameModifyTime&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1659513420</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;nickname&quot;</span><span class="o">:</span><span class="w"> </span><span class="o">&lt;</span><span class="nx">string</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;openFavorite&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;privateAccount&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;profileEmbedPermission&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;profileTab&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">               </span><span class="s2">&quot;showPlayListTab&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">               </span><span class="s2">&quot;showQuestionTab&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">            </span><span class="p">},</span>
+<span class="w">            </span><span class="s2">&quot;relation&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;secUid&quot;</span><span class="o">:</span><span class="w"> </span><span class="o">&lt;</span><span class="nx">string</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;secret&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;signature&quot;</span><span class="o">:</span><span class="w"> </span><span class="o">&lt;</span><span class="nx">string</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;stitchSetting&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;ttSeller&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;uniqueId&quot;</span><span class="o">:</span><span class="w"> </span><span class="o">&lt;</span><span class="nx">string</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;verified&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">   </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/api/comment/list</span></span></dt>
+<dd><blockquote>
+<div><p>Get comments of a video</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>comments</strong> (<em>json</em>) – List of comments</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Example response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Vary</span><span class="o">:</span> <span class="l">Accept</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">text/javascript</span>
+
+<span class="p">{</span>
+<span class="s2">&quot;alias_comment_deleted&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="s2">&quot;comments&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">   </span><span class="p">{</span>
+<span class="w">         </span><span class="s2">&quot;author_pin&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">         </span><span class="s2">&quot;aweme_id&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;7279848477109062945&quot;</span><span class="p">,</span>
+<span class="w">         </span><span class="s2">&quot;cid&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;7280136767352308512&quot;</span><span class="p">,</span>
+<span class="w">         </span><span class="s2">&quot;collect_stat&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span>
+<span class="w">         </span><span class="s2">&quot;comment_language&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;de&quot;</span><span class="p">,</span>
+<span class="w">         </span><span class="s2">&quot;create_time&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1695038967</span><span class="p">,</span>
+<span class="w">         </span><span class="s2">&quot;digg_count&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1413</span><span class="p">,</span>
+<span class="w">         </span><span class="s2">&quot;image_list&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">         </span><span class="s2">&quot;is_author_digged&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">         </span><span class="s2">&quot;label_list&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">               </span><span class="s2">&quot;text&quot;</span><span class="o">:</span><span class="w"> </span><span class="o">&lt;</span><span class="nx">string</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">               </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">20</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">         </span><span class="p">],</span>
+<span class="w">         </span><span class="s2">&quot;no_show&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">         </span><span class="s2">&quot;reply_comment&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">               </span><span class="s2">&quot;aweme_id&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;7279848477109062945&quot;</span><span class="p">,</span>
+<span class="w">               </span><span class="s2">&quot;cid&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;7280143271883981600&quot;</span><span class="p">,</span>
+<span class="w">               </span><span class="s2">&quot;collect_stat&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span>
+<span class="w">               </span><span class="s2">&quot;comment_language&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;de&quot;</span><span class="p">,</span>
+<span class="w">               </span><span class="s2">&quot;create_time&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1695040498</span><span class="p">,</span>
+<span class="w">               </span><span class="s2">&quot;digg_count&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">392</span><span class="p">,</span>
+<span class="w">               </span><span class="s2">&quot;image_list&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">               </span><span class="s2">&quot;is_author_digged&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">               </span><span class="s2">&quot;label_list&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                     </span><span class="p">{</span>
+<span class="w">                        </span><span class="s2">&quot;text&quot;</span><span class="o">:</span><span class="w"> </span><span class="o">&lt;</span><span class="nx">string</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">                        </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span>
+<span class="w">                     </span><span class="p">}</span>
+<span class="w">               </span><span class="p">],</span>
+<span class="w">               </span><span class="s2">&quot;label_text&quot;</span><span class="o">:</span><span class="w"> </span><span class="o">&lt;</span><span class="nx">string</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">               </span><span class="s2">&quot;label_type&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span>
+<span class="w">               </span><span class="s2">&quot;no_show&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">               </span><span class="s2">&quot;reply_comment&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">               </span><span class="s2">&quot;reply_id&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;7280136767352308512&quot;</span><span class="p">,</span>
+<span class="w">               </span><span class="s2">&quot;reply_to_reply_id&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;0&quot;</span><span class="p">,</span>
+<span class="w">               </span><span class="s2">&quot;share_info&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                     </span><span class="s2">&quot;acl&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                        </span><span class="s2">&quot;code&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span>
+<span class="w">                        </span><span class="s2">&quot;extra&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;{\&quot;item_share_acl\&quot;:\&quot;empty item value\&quot;}&quot;</span>
+<span class="w">                     </span><span class="p">},</span>
+<span class="w">                     </span><span class="s2">&quot;desc&quot;</span><span class="o">:</span><span class="w"> </span><span class="o">&lt;</span><span class="nx">string</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">                     </span><span class="s2">&quot;title&quot;</span><span class="o">:</span><span class="w"> </span><span class="o">&lt;</span><span class="nx">string</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">                     </span><span class="s2">&quot;url&quot;</span><span class="o">:</span><span class="w"> </span><span class="o">&lt;</span><span class="nx">string</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">               </span><span class="p">},</span>
+<span class="w">               </span><span class="s2">&quot;status&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span>
+<span class="w">               </span><span class="s2">&quot;text&quot;</span><span class="o">:</span><span class="w"> </span><span class="o">&lt;</span><span class="nx">string</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">               </span><span class="s2">&quot;text_extra&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[],</span>
+<span class="w">               </span><span class="s2">&quot;trans_btn_style&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span>
+<span class="w">               </span><span class="s2">&quot;user&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                     </span><span class="s2">&quot;account_labels&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">                     </span><span class="s2">&quot;ad_cover_url&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">                     </span><span class="s2">&quot;advance_feature_item_order&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">                     </span><span class="s2">&quot;advanced_feature_info&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">                     </span><span class="s2">&quot;avatar_thumb&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                        </span><span class="s2">&quot;uri&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;tos-useast2a-avt-0068-euttp/d106515243ceb865bacd4db68ea94283&quot;</span><span class="p">,</span>
+<span class="w">                        </span><span class="s2">&quot;url_list&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                           </span><span class="o">&lt;</span><span class="nx">string</span><span class="o">&gt;</span>
+<span class="w">                        </span><span class="p">],</span>
+<span class="w">                        </span><span class="s2">&quot;url_prefix&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span>
+<span class="w">                     </span><span class="p">},</span>
+<span class="w">                     </span><span class="s2">&quot;bold_fields&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">                     </span><span class="s2">&quot;can_message_follow_status_list&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">                     </span><span class="s2">&quot;can_set_geofencing&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">                     </span><span class="s2">&quot;cha_list&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">                     </span><span class="s2">&quot;cover_url&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">                     </span><span class="s2">&quot;custom_verify&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="w">                     </span><span class="s2">&quot;enterprise_verify_reason&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="w">                     </span><span class="s2">&quot;events&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">                     </span><span class="s2">&quot;followers_detail&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">                     </span><span class="s2">&quot;geofencing&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">                     </span><span class="s2">&quot;homepage_bottom_toast&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">                     </span><span class="s2">&quot;item_list&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">                     </span><span class="s2">&quot;mutual_relation_avatars&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">                     </span><span class="s2">&quot;need_points&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">                     </span><span class="s2">&quot;nickname&quot;</span><span class="o">:</span><span class="w"> </span><span class="o">&lt;</span><span class="nx">string</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">                     </span><span class="s2">&quot;platform_sync_info&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">                     </span><span class="s2">&quot;relative_users&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">                     </span><span class="s2">&quot;search_highlight&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">                     </span><span class="s2">&quot;sec_uid&quot;</span><span class="o">:</span><span class="w"> </span><span class="o">&lt;</span><span class="nx">string</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">                     </span><span class="s2">&quot;shield_edit_field_info&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">                     </span><span class="s2">&quot;type_label&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">                     </span><span class="s2">&quot;uid&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;6958026025243706373&quot;</span><span class="p">,</span>
+<span class="w">                     </span><span class="s2">&quot;unique_id&quot;</span><span class="o">:</span><span class="w"> </span><span class="o">&lt;</span><span class="nx">string</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">                     </span><span class="s2">&quot;user_profile_guide&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">                     </span><span class="s2">&quot;user_tags&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">                     </span><span class="s2">&quot;white_cover_url&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span>
+<span class="w">               </span><span class="p">},</span>
+<span class="w">               </span><span class="s2">&quot;user_buried&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">               </span><span class="s2">&quot;user_digged&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">         </span><span class="p">],</span>
+<span class="w">         </span><span class="s2">&quot;reply_comment_total&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">8</span><span class="p">,</span>
+<span class="w">         </span><span class="s2">&quot;reply_id&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;0&quot;</span><span class="p">,</span>
+<span class="w">         </span><span class="s2">&quot;reply_to_reply_id&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;0&quot;</span><span class="p">,</span>
+<span class="w">         </span><span class="s2">&quot;share_info&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;acl&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">               </span><span class="s2">&quot;code&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span>
+<span class="w">               </span><span class="s2">&quot;extra&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;{\&quot;item_share_acl\&quot;:\&quot;empty item value\&quot;}&quot;</span>
+<span class="w">            </span><span class="p">},</span>
+<span class="w">            </span><span class="s2">&quot;desc&quot;</span><span class="o">:</span><span class="w"> </span><span class="o">&lt;</span><span class="nx">string</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;title&quot;</span><span class="o">:</span><span class="w"> </span><span class="o">&lt;</span><span class="nx">string</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;url&quot;</span><span class="o">:</span><span class="w"> </span><span class="o">&lt;</span><span class="nx">string</span><span class="o">&gt;</span>
+<span class="w">         </span><span class="p">},</span>
+<span class="w">         </span><span class="s2">&quot;status&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span>
+<span class="w">         </span><span class="s2">&quot;stick_position&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span>
+<span class="w">         </span><span class="s2">&quot;text&quot;</span><span class="o">:</span><span class="w"> </span><span class="o">&lt;</span><span class="nx">string</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">         </span><span class="s2">&quot;text_extra&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[],</span>
+<span class="w">         </span><span class="s2">&quot;trans_btn_style&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span>
+<span class="w">         </span><span class="s2">&quot;user&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;account_labels&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;ad_cover_url&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;advance_feature_item_order&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;advanced_feature_info&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;avatar_thumb&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">               </span><span class="s2">&quot;uri&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;tos-useast2a-avt-0068-euttp/d8b118380e3ddbd227adf3c20042e5a9&quot;</span><span class="p">,</span>
+<span class="w">               </span><span class="s2">&quot;url_list&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                     </span><span class="o">&lt;</span><span class="nx">string</span><span class="o">&gt;</span>
+<span class="w">               </span><span class="p">],</span>
+<span class="w">               </span><span class="s2">&quot;url_prefix&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span>
+<span class="w">            </span><span class="p">},</span>
+<span class="w">            </span><span class="s2">&quot;bold_fields&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;can_message_follow_status_list&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;can_set_geofencing&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;cha_list&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;cover_url&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;custom_verify&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;enterprise_verify_reason&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;events&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;followers_detail&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;geofencing&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;homepage_bottom_toast&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;item_list&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;mutual_relation_avatars&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;need_points&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;nickname&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;vykdzgdrn47&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;platform_sync_info&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;relative_users&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;search_highlight&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;sec_uid&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;MS4wLjABAAAA5SL64ddtcxtnLNxRWIeq427MNy1BSnxaEcbxQPaXtEzUwMVfKHY6m8Pzpsq8yG9A&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;shield_edit_field_info&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;type_label&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;uid&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;7275216108189271073&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;unique_id&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;vykdzwcwk&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;user_profile_guide&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;user_tags&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;white_cover_url&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span>
+<span class="w">         </span><span class="p">},</span>
+<span class="w">         </span><span class="s2">&quot;user_buried&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">         </span><span class="s2">&quot;user_digged&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span>
+<span class="w">   </span><span class="p">},</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
 </section>
 
 
