@@ -49,3 +49,7 @@ test:
 # build wheel package
 build_whl:
 	python3 setup.py bdist_wheel
+
+# run
+run:
+	python3 tiktokscraper

@@ -1,3 +1,7 @@
+!This package does not work at the moment!
+==========================================
+It will in a few months though
+
 TiktokScraper
 =============
 
