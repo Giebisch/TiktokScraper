@@ -14,6 +14,7 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import datetime
+import tiktokscraper
 
 # -- Project information -----------------------------------------------------
 
