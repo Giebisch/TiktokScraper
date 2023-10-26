@@ -1,7 +1,8 @@
 Source Data
 ===========
 
-In this section a collection of all the API calls the Tiktok Web App makes will be listed
+In this section a collection of all the API calls the Tiktok Web App makes will be listed.
+This is the raw data from the Tiktok backend, not from the scraper itself.
 
 
 .. http:get:: /
