@@ -14,10 +14,9 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import datetime
-
-import sys
 import os
-sys.path.insert(0, os.path.abspath('../tiktokscraper'))
+import sys
+sys.path.insert(0, os.path.abspath('../source'))
 
 # -- Project information -----------------------------------------------------
 
