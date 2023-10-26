@@ -2,4 +2,3 @@
 sphinx~=7.2.6
 sphinx_rtd_theme~=1.2
 sphinxcontrib-httpdomain
--e .
