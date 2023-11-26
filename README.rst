@@ -21,14 +21,17 @@ User Guide
 How to Install
 ++++++++++++++
 
-Stable release
-``````````````
+Stable release (not available yet)
+``````````````````````````````````
 
 To install TiktokScraper, run this command in your terminal:
 
 .. code-block:: console
 
     $ pip install tiktokscraper
+    $ python -m playwright install
+    $ pip install playwright
+    $ playwright install
 
 This is the preferred method to install TiktokScraper, as it will always install the most recent stable release.
 
