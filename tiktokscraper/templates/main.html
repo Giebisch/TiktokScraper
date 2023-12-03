@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TiktokScraper</title>
+    <script src="https://unpkg.com/htmx.org@1.9.9" integrity="sha384-QFjmbokDn2DjBjq+fM+8LUIVrAgqcNW2s0PjAxHETgRn9l4fvX31ZxDxvwQnyMOX" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+    <div class="w-75 m-auto text-center">
+        <h1>TiktokScraper</h1>
+
+        <!-- Description -->
+        <div class="card">
+            <div class="card-body">
+              See <a href="https://giebisch.github.io/TiktokScraper/">https://giebisch.github.io/TiktokScraper/</a> for more information.
+            </div>
+        </div>
+        <!-- Under Construction -->
+        <div class="alert alert-danger w-50 m-auto my-3" role="alert">
+            Not all features are currently working. This is just a preview!
+        </div>
+        
+        <!-- Form -->
+        <form class="my-3" hx-get="/api" hx-target="#results">
+            <!-- Choose feature -->
+            <div class="btn-group" role="group" aria-label="Toggle scraping feature">
+                <input type="radio" class="btn-check" name="feature" id="profile" value="profile" autocomplete="off" checked>
+                <label class="btn btn-outline-primary" for="profile">Profile</label>
+              
+                <input type="radio" class="btn-check" name="feature" id="video" value="video" autocomplete="off">
+                <label class="btn btn-outline-primary" for="video">Video</label>
+              
+                <input type="radio" class="btn-check" name="feature" id="Comments" value="comments" autocomplete="off">
+                <label class="btn btn-outline-primary" for="Comments">Comments</label>
+              </div>
+            <!-- Input ID -->
+            <div class="mb-3">
+              <label for="inputId" class="form-label">Input ID or URL</label>
+              <input type="text" class="form-control mx-auto" id="inputId" aria-describedby="idHelp" style="width: 400px" name="id">
+              <div id="idHelp" class="form-text">Input the ID or URL of the profile/video you want to scrape</div>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        <div id="results"></div>
+    </div>
+</body>
+</html>
