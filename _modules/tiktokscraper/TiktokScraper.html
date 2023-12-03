@@ -78,40 +78,79 @@
   <h1>Source code for tiktokscraper.TiktokScraper</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 
 <span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Comment</span><span class="p">,</span> <span class="n">Profile</span><span class="p">,</span> <span class="n">Video</span>
+<span class="kn">from</span> <span class="nn">.scraping</span> <span class="kn">import</span> <span class="n">get_comments_from_video</span><span class="p">,</span> <span class="n">get_profile_details</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 <div class="viewcode-block" id="TiktokScraper">
 <a class="viewcode-back" href="../../02_usage.html#tiktokscraper.TiktokScraper.TiktokScraper">[docs]</a>
 <span class="k">class</span> <span class="nc">TiktokScraper</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Instantiates TiktokScraper object used for gathering various Tiktok data</span>
+
+<span class="sd">    :ivar str user_agent: Provide custom user_agent</span>
+<span class="sd">    :ivar List[str] proxies: Provide custom proxies</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TiktokScraper</span><span class="p">:</span>
-        <span class="c1"># arg commands</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">video</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">video</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">profile</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">profile</span>
-        <span class="c1"># parsed data</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_comments</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_video</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_profile_details</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TiktokScraper</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_agent</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;user-agent&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;user-agent&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="k">else</span> <span class="s2">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">proxies</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;proxies&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;proxies&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="k">else</span> <span class="p">[]</span>
+
+        <span class="c1"># check if we want to scrape one video or several</span>
+        <span class="k">if</span> <span class="s2">&quot;video&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">video_kwargs</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;video&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">video_kwargs</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">videos</span> <span class="o">=</span> <span class="p">[</span><span class="n">video_kwargs</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">videos</span> <span class="o">=</span> <span class="n">video_kwargs</span>
+        
+        <span class="c1"># check if we want to scrape one profile or several</span>
+        <span class="k">if</span> <span class="s2">&quot;profile&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">profile_kwargs</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;profile&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">profile_kwargs</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">profiles</span> <span class="o">=</span> <span class="p">[</span><span class="n">profile_kwargs</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">profiles</span> <span class="o">=</span> <span class="n">profile_kwargs</span>
+        
+        
 <div class="viewcode-block" id="TiktokScraper.get_comments">
 <a class="viewcode-back" href="../../02_usage.html#tiktokscraper.TiktokScraper.TiktokScraper.get_comments">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_comments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">video_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Comment</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Scrape comments from a specific video. Provide video url or video id</span>
+    <span class="k">def</span> <span class="nf">get_comments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">videos</span><span class="p">,</span><span class="n">limit_comments</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Comment</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Scrape comments from a specific video. Provide video url(s) or video id(s)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="kc">None</span></div>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">videos</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
+            <span class="n">videos</span> <span class="o">=</span> <span class="p">[</span><span class="n">videos</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">videos</span> <span class="o">=</span> <span class="n">videos</span>
+        
+        <span class="n">comments</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">video</span> <span class="ow">in</span> <span class="n">videos</span><span class="p">:</span>
+            <span class="n">comments</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">get_comments_from_video</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_agent</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">proxies</span><span class="p">,</span> <span class="n">video</span><span class="p">,</span> <span class="n">limit_comments</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">comments</span></div>
+
 
 <div class="viewcode-block" id="TiktokScraper.get_profile_details">
 <a class="viewcode-back" href="../../02_usage.html#tiktokscraper.TiktokScraper.TiktokScraper.get_profile_details">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_profile_details</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">profile</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Profile</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Scrape all information regarding a specific profile. Provide profile url or username</span>
+    <span class="k">def</span> <span class="nf">get_profile_details</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">profiles</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Profile</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Scrape all information regarding a specific profile. Provide profile url(s) or username(s)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="kc">None</span></div>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">profiles</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
+            <span class="n">profiles</span> <span class="o">=</span> <span class="p">[</span><span class="n">profiles</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">profiles</span> <span class="o">=</span> <span class="n">profiles</span>
+
+        <span class="n">profile_details</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">profile</span> <span class="ow">in</span> <span class="n">profiles</span><span class="p">:</span>
+            <span class="n">profile_details</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">get_profile_details</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_agent</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">proxies</span><span class="p">,</span> <span class="n">profile</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">profile_details</span></div>
+
 
 <div class="viewcode-block" id="TiktokScraper.get_video_details">
 <a class="viewcode-back" href="../../02_usage.html#tiktokscraper.TiktokScraper.TiktokScraper.get_video_details">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_video_details</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">video_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Video</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Scrape all relevant details from a specific video. Provide video url or video id</span>
+    <span class="k">def</span> <span class="nf">get_video_details</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">video_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Video</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Scrape all relevant details from a specific video. Provide video url(s) or video id(s)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 </div>

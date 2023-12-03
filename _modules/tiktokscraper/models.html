@@ -76,28 +76,35 @@
            <div itemprop="articleBody">
              
   <h1>Source code for tiktokscraper.models</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">datetime</span>
+
 <div class="viewcode-block" id="Comment">
 <a class="viewcode-back" href="../../02_usage.html#tiktokscraper.models.Comment">[docs]</a>
-<span></span><span class="k">class</span> <span class="nc">Comment</span><span class="p">():</span>
+<span class="k">class</span> <span class="nc">Comment</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Entails all relevant data concerning a specific comment</span>
 
 <span class="sd">    :ivar str comment_language: Comment language</span>
 <span class="sd">    :ivar str text: Comment content</span>
-<span class="sd">    :ivar str user: Username</span>
+<span class="sd">    :ivar str user_id: Unique username</span>
+<span class="sd">    :ivar str user_nickname: User nickname (not unique)</span>
+<span class="sd">    :ivar datetime.datetime create_time: Create time</span>
 <span class="sd">    :ivar int reply_comment_total: Number of replies to the comment</span>
 <span class="sd">    :ivar List[Comment] reply_comment: Replies</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">comment_language</span> <span class="o">=</span> <span class="n">api</span><span class="p">[</span><span class="s2">&quot;comment_language&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">api</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">api</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">reply_comment_total</span> <span class="o">=</span> <span class="n">api</span><span class="p">[</span><span class="s2">&quot;reply_comment_total&quot;</span><span class="p">]</span>
-
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comment_language</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;comment_language&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_id</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">][</span><span class="s2">&quot;unique_id&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_nickname</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">][</span><span class="s2">&quot;nickname&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;create_time&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reply_comment_total</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;reply_comment_total&quot;</span><span class="p">]</span>
         <span class="c1"># further processing necessary</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">reply_comment</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process_reply_comments</span><span class="p">(</span><span class="n">api</span><span class="p">[</span><span class="s2">&quot;reply_comment&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reply_comment</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process_reply_comments</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;reply_comment&quot;</span><span class="p">])</span>
     
     <span class="k">def</span> <span class="nf">_process_reply_comments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reply_comments</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">Comment</span><span class="p">(</span><span class="n">comment</span><span class="p">)</span> <span class="k">for</span> <span class="n">comment</span> <span class="ow">in</span> <span class="n">reply_comments</span><span class="p">]</span></div>
+        <span class="k">if</span> <span class="n">reply_comments</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">Comment</span><span class="p">(</span><span class="n">comment</span><span class="p">)</span> <span class="k">for</span> <span class="n">comment</span> <span class="ow">in</span> <span class="n">reply_comments</span><span class="p">]</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
 
 
 <div class="viewcode-block" id="Profile">
@@ -117,19 +124,19 @@
 <span class="sd">    :ivar str signature: Signature</span>
 <span class="sd">    :ivar bool verified: Is verified True/False</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">api</span> <span class="o">=</span> <span class="n">api</span><span class="p">[</span><span class="s2">&quot;userInfo&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">follower_count</span> <span class="o">=</span> <span class="n">api</span><span class="p">[</span><span class="s2">&quot;stats&quot;</span><span class="p">][</span><span class="s2">&quot;followerCount&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">following_count</span> <span class="o">=</span> <span class="n">api</span><span class="p">[</span><span class="s2">&quot;stats&quot;</span><span class="p">][</span><span class="s2">&quot;followingCount&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">friend_count</span> <span class="o">=</span> <span class="n">api</span><span class="p">[</span><span class="s2">&quot;stats&quot;</span><span class="p">][</span><span class="s2">&quot;friendCount&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">heart</span> <span class="o">=</span> <span class="n">api</span><span class="p">[</span><span class="s2">&quot;stats&quot;</span><span class="p">][</span><span class="s2">&quot;heart&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">heart_count</span> <span class="o">=</span> <span class="n">api</span><span class="p">[</span><span class="s2">&quot;stats&quot;</span><span class="p">][</span><span class="s2">&quot;heartCount&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">video_count</span> <span class="o">=</span> <span class="n">api</span><span class="p">[</span><span class="s2">&quot;stats&quot;</span><span class="p">][</span><span class="s2">&quot;videoCount&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">commerce_user</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">api</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">][</span><span class="s2">&quot;commerceUserInfo&quot;</span><span class="p">][</span><span class="s2">&quot;commerceUser&quot;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nickname</span> <span class="o">=</span> <span class="n">api</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">][</span><span class="s2">&quot;nickname&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">private_account</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">api</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">][</span><span class="s2">&quot;privateAccount&quot;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">signature</span> <span class="o">=</span> <span class="n">api</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">][</span><span class="s2">&quot;signature&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">verified</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">api</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">][</span><span class="s2">&quot;verified&quot;</span><span class="p">])</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">follower_count</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;stats&quot;</span><span class="p">][</span><span class="s2">&quot;followerCount&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">following_count</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;stats&quot;</span><span class="p">][</span><span class="s2">&quot;followingCount&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">friend_count</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;stats&quot;</span><span class="p">][</span><span class="s2">&quot;friendCount&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">heart</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;stats&quot;</span><span class="p">][</span><span class="s2">&quot;heart&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">heart_count</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;stats&quot;</span><span class="p">][</span><span class="s2">&quot;heartCount&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">video_count</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;stats&quot;</span><span class="p">][</span><span class="s2">&quot;videoCount&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">commerce_user</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">][</span><span class="s2">&quot;commerceUserInfo&quot;</span><span class="p">][</span><span class="s2">&quot;commerceUser&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nickname</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">][</span><span class="s2">&quot;nickname&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">private_account</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">][</span><span class="s2">&quot;privateAccount&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">signature</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">][</span><span class="s2">&quot;signature&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verified</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">][</span><span class="s2">&quot;verified&quot;</span><span class="p">])</span></div>
 
 
 <div class="viewcode-block" id="Video">
@@ -140,9 +147,9 @@
 <span class="sd">    :ivar str video_id: Video ID</span>
 <span class="sd">    :ivar str description: Description</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">video_id</span> <span class="o">=</span> <span class="n">api</span><span class="p">[</span><span class="s2">&quot;video_id&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">api</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span></div>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">video_id</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;video_id&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span></div>
 
 </pre></div>
 
