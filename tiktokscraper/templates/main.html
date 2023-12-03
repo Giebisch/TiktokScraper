@@ -27,13 +27,21 @@
             <!-- Choose feature -->
             <div class="btn-group" role="group" aria-label="Toggle scraping feature">
                 <input type="radio" class="btn-check" name="feature" id="profile" value="profile" autocomplete="off" checked>
-                <label class="btn btn-outline-primary" for="profile">Profile</label>
+                <label class="btn btn-outline-secondary" for="profile">Profile</label>
               
                 <input type="radio" class="btn-check" name="feature" id="video" value="video" autocomplete="off">
-                <label class="btn btn-outline-primary" for="video">Video</label>
+                <label class="btn btn-outline-secondary" for="video">Video</label>
               
                 <input type="radio" class="btn-check" name="feature" id="Comments" value="comments" autocomplete="off">
-                <label class="btn btn-outline-primary" for="Comments">Comments</label>
+                <label class="btn btn-outline-secondary" for="Comments">Comments</label>
+              </div><br>
+              <!-- Cards or json -->
+            <div class="btn-group my-2" role="group" aria-label="Toggle format">
+                  <input type="radio" class="btn-check" name="format" id="HTML" value="HTML" autocomplete="off" checked>
+                  <label class="btn btn-outline-secondary" for="HTML">HTML</label>
+                
+                  <input type="radio" class="btn-check" name="format" id="JSON" value="JSON" autocomplete="off">
+                  <label class="btn btn-outline-secondary" for="JSON">JSON</label>
               </div>
             <!-- Input ID -->
             <div class="mb-3">
@@ -41,6 +49,7 @@
               <input type="text" class="form-control mx-auto" id="inputId" aria-describedby="idHelp" style="width: 400px" name="id">
               <div id="idHelp" class="form-text">Input the ID or URL of the profile/video you want to scrape</div>
             </div>
+            <!-- Send -->
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
         <div id="results"></div>

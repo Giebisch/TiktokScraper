@@ -20,9 +20,6 @@ def get_comments_from_video(user_agent, proxies, video_link, limit_comments):
 
             response = requests.get(f"https://www.tiktok.com/api/comment/list/?aid=1988&aweme_id={video_link}&count=9999999&cursor={cursor}", headers=headers, proxies=proxies).json()
 
-            if response.status_code != 200:
-                continue
-
             for comment in response["comments"]:
                 comments.append(Comment(**comment))
 
