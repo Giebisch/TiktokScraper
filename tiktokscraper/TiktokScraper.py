@@ -13,6 +13,8 @@ class TiktokScraper():
 
     :ivar str user_agent: Provide custom user_agent
     :ivar List[str] proxies: Provide custom proxies
+    :returns: Instantiated object
+    :rtype: :class:`TiktokScraper`
     """
     def __init__(self, **kwargs) -> TiktokScraper:
         self.user_agent = kwargs["user-agent"] if "user-agent" in kwargs else "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36"
@@ -35,8 +37,13 @@ class TiktokScraper():
                 self.profiles = profile_kwargs
         
         
-    def get_comments(self, videos,limit_comments=50) -> List[Comment]:
+    def get_comments(self, videos, limit_comments=50) -> List[Comment]:
         """Scrape comments from a specific video. Provide video url(s) or video id(s)
+
+        :param List[str] videos: Provide video url(s) or video id(s). Can be a single string or list of strings
+        :param int limit_comments: Maximum amount of comments
+        :returns: :class:`tiktokscraper.models.Comment`
+        :rtype: list
         """
         if type(videos) == str:
             videos = [videos]
@@ -50,6 +57,10 @@ class TiktokScraper():
 
     def get_profile_details(self, profiles) -> List[Profile]:
         """Scrape all information regarding a specific profile. Provide profile url(s) or username(s)
+        
+        :param List[str] profiles: Provide profile url(s) or profile id(s). Can be a single string or list of strings
+        :returns: :class:`tiktokscraper.models.Profile`
+        :rtype: list
         """
         if type(profiles) == str:
             profiles = [profiles]
@@ -61,7 +72,57 @@ class TiktokScraper():
             profile_details.append(get_profile_details(self.user_agent, self.proxies, profile))
         return profile_details
 
-    def get_video_details(self, video_url: str) -> List[Video]:
+    def get_video_details(self, videos) -> List[Video]:
         """Scrape all relevant details from a specific video. Provide video url(s) or video id(s)
+
+        :param List[str] videos: Provide video url(s) or video id(s). Can be a single string or list of strings
+        :returns: :class:`tiktokscraper.models.Video`
+        :rtype: list
+        """
+        return None
+
+    def get_video_ids_of_user(self, user: str) -> List[str]:
+        """Return all relevant video ids for a specific user. Provide user url or id
+
+        :param user: Provide user url or id
+        :returns: List of video ids of user
+        :rtype: list
+        """
+        return None
+
+    def get_videos_for_keyword(self, keyword: str, limit_videos=10) -> List[str]:
+        """Return video ids for a specific keyword.
+
+        :param keyword: Provide keyword
+        :param int limit_videos: Maximum amount of videos
+        :returns: List of video ids for keyword
+        :rtype: list
+        """
+        return None
+
+    def get_trending_videos(self, limit_videos=10) -> List[str]:
+        """Return video ids for current trending videos.
+
+        :param int limit_videos: Maximum amount of videos
+        :returns: List of video ids of trending videos
+        :rtype: list
+        """
+        return None
+    
+    def get_followers_for_user(self, user) -> List[str]:
+        """Return followers for user. Provide user id or url
+
+        :param str user: User id or url
+        :returns: List of follower ids
+        :rtype: list
+        """
+        return None
+    
+    def get_user_following(self, user) -> List[str]:
+        """Return profiles the user is following. Provide user id or url
+
+        :param str user: User id or url
+        :returns: List of following ids
+        :rtype: list
         """
         return None
