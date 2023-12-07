@@ -77,6 +77,7 @@
              
   <h1>Source code for tiktokscraper.models</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">json</span>
 
 <div class="viewcode-block" id="Comment">
 <a class="viewcode-back" href="../../02_usage.html#tiktokscraper.models.Comment">[docs]</a>
@@ -104,7 +105,11 @@
     <span class="k">def</span> <span class="nf">_process_reply_comments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reply_comments</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">reply_comments</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[</span><span class="n">Comment</span><span class="p">(</span><span class="n">comment</span><span class="p">)</span> <span class="k">for</span> <span class="n">comment</span> <span class="ow">in</span> <span class="n">reply_comments</span><span class="p">]</span>
-        <span class="k">return</span> <span class="kc">None</span></div>
+        <span class="k">return</span> <span class="kc">None</span>
+    
+    <span class="k">def</span> <span class="nf">json</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="k">lambda</span> <span class="n">o</span><span class="p">:</span> <span class="n">o</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">))</span> <span class="k">else</span> <span class="n">o</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">,</span> 
+            <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Profile">
