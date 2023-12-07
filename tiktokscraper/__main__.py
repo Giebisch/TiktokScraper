@@ -1,6 +1,6 @@
 import argparse
 
-from TiktokScraper import TiktokScraper
+from .TiktokScraper import TiktokScraper
 
 if __name__ == "__main__":
     # requests has to be installed
@@ -19,10 +19,13 @@ if __name__ == "__main__":
     parser.add_argument("--web", action="store_true", default=False)
 
     args = parser.parse_args()
-    print(args)
     
     if args.web:
-        # TODO: start webserver
-        exit()
-
-    TiktokScraper(args)
+        try:
+            from flask import Flask
+        except:
+            print("Make sure you have 'flask' installed on your system")
+            quit()
+        from .webserver import *
+    else:
+        TiktokScraper(args)

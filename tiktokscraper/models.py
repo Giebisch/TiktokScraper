@@ -1,4 +1,5 @@
 import datetime
+import json
 
 class Comment():
     """Entails all relevant data concerning a specific comment
@@ -25,6 +26,10 @@ class Comment():
         if reply_comments:
             return [Comment(comment) for comment in reply_comments]
         return None
+    
+    def json(self):
+        return json.dumps(self, default=lambda o: o.isoformat() if (isinstance(o, datetime.datetime)) else o.__dict__, 
+            sort_keys=True, indent=4)
 
 class Profile():
     """Entails all relevant data concerning a profile
