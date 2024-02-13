@@ -47,15 +47,17 @@ class Profile():
     :ivar bool verified: Is verified True/False
     """
     def __init__(self, **kwargs):
-        api = api["userInfo"]
-        self.follower_count = kwargs["stats"]["followerCount"]
-        self.following_count = kwargs["stats"]["followingCount"]
-        self.friend_count = kwargs["stats"]["friendCount"]
-        self.heart = kwargs["stats"]["heart"]
-        self.heart_count = kwargs["stats"]["heartCount"]
-        self.video_count = kwargs["stats"]["videoCount"]
+        kwargs = kwargs["userInfo"]
+        self.follower_count = int(kwargs["stats"]["followerCount"])
+        self.following_count = int(kwargs["stats"]["followingCount"])
+        self.friend_count = int(kwargs["stats"]["friendCount"])
+        self.heart = int(kwargs["stats"]["heart"])
+        self.heart_count = int(kwargs["stats"]["heartCount"])
+        self.video_count = int(kwargs["stats"]["videoCount"])
         self.commerce_user = bool(kwargs["user"]["commerceUserInfo"]["commerceUser"])
         self.nickname = kwargs["user"]["nickname"]
+        self.unique_id = kwargs["user"]["uniqueId"]
+        self.secUid = kwargs["user"]["secUid"]
         self.private_account = bool(kwargs["user"]["privateAccount"])
         self.signature = kwargs["user"]["signature"]
         self.verified = bool(kwargs["user"]["verified"])
@@ -67,5 +69,18 @@ class Video():
     :ivar str description: Description
     """
     def __init__(self, **kwargs):
-        self.video_id = kwargs["video_id"]
-        self.description = kwargs["description"]
+        self.id = kwargs["id"]
+        self.description = kwargs["desc"]
+        self.create_time = int(kwargs["createTime"])
+        self.is_pinned = bool(kwargs["isPinnedItem"]) if "isPinnedItem" in kwargs else False
+        self.music_author = kwargs["music"]["authorName"]
+        self.music_id = kwargs["music"]["id"]
+        self.music_title = kwargs["music"]["title"]
+        self.music_url = kwargs["music"]["playUrl"]
+        self.collect_count = kwargs["stats"]["collectCount"]
+        self.comment_count = kwargs["stats"]["commentCount"]
+        self.digg_count = kwargs["stats"]["diggCount"]
+        self.play_count = kwargs["stats"]["playCount"]
+        self.share_count = kwargs["stats"]["shareCount"]
+        # not all videos provide a download adress
+        self.download_url = kwargs["video"]["downloadAddr"] if "video" in kwargs and "downloadAddr" in kwargs["video"] else None

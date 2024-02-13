@@ -2,9 +2,12 @@ from __future__ import annotations
 from typing import List
 import json
 import logging
+import time
 
 from .models import Comment, Profile, Video
-from .scraping import get_comments_from_video, get_profile_details
+from .scraping import get_comments_from_video, get_profile_detail, get_videos_for_user
+
+from playwright.sync_api import sync_playwright
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +38,29 @@ class TiktokScraper():
                 self.profiles = [profile_kwargs]
             else:
                 self.profiles = profile_kwargs
-        
+
+        self.playwright_storage = None
+    
+    def _initialize_playwright(self, sign_in=False) -> None:
+        """Opens browser to initialize context, also used to sign in.
+
+        :rtype: None
+        """
+        if self.playwright_storage is not None:
+            return
+
+        p = sync_playwright().start()
+        browser = p.chromium.launch(headless=False)
+        context = browser.new_context(user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36")
+        page = context.new_page()
+        page.goto("https://www.tiktok.com/@google")
+
+        # Todo: better method to detect sign in
+        time.sleep(12)
+
+        self.playwright_storage = context.storage_state()
+        browser.close()
+        p.stop()
         
     def get_comments(self, videos, limit_comments=50) -> List[Comment]:
         """Scrape comments from a specific video. Provide video url(s) or video id(s)
@@ -64,12 +89,19 @@ class TiktokScraper():
         """
         if type(profiles) == str:
             profiles = [profiles]
-        else:
-            profiles = profiles
+
+        self._initialize_playwright()
+
+        p = sync_playwright().start()
+        browser = p.chromium.launch(headless=True)
+        context = browser.new_context(storage_state=self.playwright_storage)
 
         profile_details = []
         for profile in profiles:
-            profile_details.append(get_profile_details(self.user_agent, self.proxies, profile))
+            context, profile_detail = get_profile_detail(context, profile)
+            profile_details.append(profile_detail)
+
+        self.playwright_storage = context.storage_state()
         return profile_details
 
     def get_video_details(self, videos) -> List[Video]:
@@ -81,14 +113,30 @@ class TiktokScraper():
         """
         return None
 
-    def get_video_ids_of_user(self, user: str) -> List[str]:
+    def get_videos_of_user(self, user: str) -> List[Video]:
         """Return all relevant video ids for a specific user. Provide user url or id
 
         :param user: Provide user url or id
-        :returns: List of video ids of user
+        :returns: List of videos of user
         :rtype: list
         """
-        return None
+
+        # Todo: option to provide secUid instead of username
+
+        self._initialize_playwright()
+
+        p = sync_playwright().start()
+        browser = p.chromium.launch(headless=True)
+        context = browser.new_context(storage_state=self.playwright_storage)
+
+        context, profile = get_profile_detail(context, user)
+
+        context = browser.new_context(user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36")
+        context, videos = get_videos_for_user(context, profile.secUid)
+
+        self.playwright_storage = context.storage_state()
+        
+        return videos
 
     def get_videos_for_keyword(self, keyword: str, limit_videos=10) -> List[str]:
         """Return video ids for a specific keyword.

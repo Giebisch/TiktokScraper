@@ -1,0 +1,9 @@
+{% for profile in profiles %}
+    <div class="card bg-light mb-3 mx-auto text-left">
+        <div class="card-header">{{ profile.follower_count }} Followers, {{ profile.heart_count }} Hearts, {{ profile.video_count }} Videos</div>
+        <div class="card-body">
+        <h5 class="card-title">{{ profile.nickname}}</h5>
+        <p class="card-text">{{ profile.signature }}</p>
+        </div>
+    </div>
+{% endfor %}

@@ -26,6 +26,7 @@ if __name__ == "__main__":
         except:
             print("Make sure you have 'flask' installed on your system")
             quit()
+        # from .webserver import *
         from .webserver import *
     else:
         TiktokScraper(args)
