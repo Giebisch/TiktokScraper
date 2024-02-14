@@ -97,3 +97,15 @@ def get_videos_for_user(context, secUid):
         videos.append(Video(**video))
 
     return context, videos
+
+def get_trending_videos(context):
+    url = "https://www.tiktok.com/api/explore/item_list/?WebIdLastTime=1707869418&aid=1988&app_language=en&app_name=tiktok_web&browser_language=en-US&browser_name=Mozilla&browser_online=true&browser_platform=MacIntel&browser_version=5.0%20%28Macintosh%3B%20Intel%20Mac%20OS%20X%2010_15_7%29%20AppleWebKit%2F537.36%20%28KHTML%2C%20like%20Gecko%29%20Chrome%2F121.0.0.0%20Safari%2F537.36&categoryType=119&channel=tiktok_web&cookie_enabled=true&count=16&device_platform=web_pc&focus_state=true&from_page=&history_len=2&is_fullscreen=false&is_page_visible=true&language=en&os=mac&priority_region=&referer=&region=DE&screen_height=1080&screen_width=1920&tz_name=Europe%2FBerlin&webcast_language=en"
+
+    page = context.new_page()
+    response = page.goto(url).json()
+
+    videos = []
+    for video in response["itemList"]:
+        videos.append(Video(**video))
+
+    return videos

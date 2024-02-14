@@ -3,9 +3,10 @@ from typing import List
 import json
 import logging
 import time
+import re
 
 from .models import Comment, Profile, Video
-from .scraping import get_comments_from_video, get_profile_detail, get_videos_for_user
+from .scraping import get_comments_from_video, get_profile_detail, get_videos_for_user, get_trending_videos
 
 from playwright.sync_api import sync_playwright
 
@@ -41,7 +42,7 @@ class TiktokScraper():
 
         self.playwright_storage = None
     
-    def _initialize_playwright(self, sign_in=False) -> None:
+    def _initialize_browser(self, sign_in=False) -> None:
         """Opens browser to initialize context, also used to sign in.
 
         :rtype: None
@@ -53,11 +54,11 @@ class TiktokScraper():
         browser = p.chromium.launch(headless=False)
         context = browser.new_context(user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36")
         page = context.new_page()
+        
         page.goto("https://www.tiktok.com/@google")
-
-        # Todo: better method to detect sign in
-        time.sleep(12)
-
+        with page.expect_response(lambda response: "verification-i18n.tiktok.com/captcha/verify?" in response.url) as response_info:
+            time.sleep(5)
+            
         self.playwright_storage = context.storage_state()
         browser.close()
         p.stop()
@@ -90,7 +91,7 @@ class TiktokScraper():
         if type(profiles) == str:
             profiles = [profiles]
 
-        self._initialize_playwright()
+        self._initialize_browser()
 
         p = sync_playwright().start()
         browser = p.chromium.launch(headless=True)
@@ -105,13 +106,30 @@ class TiktokScraper():
         return profile_details
 
     def get_video_details(self, videos) -> List[Video]:
-        """Scrape all relevant details from a specific video. Provide video url(s) or video id(s)
+        """Scrape all relevant details from a specific video. Provide video urls
 
-        :param List[str] videos: Provide video url(s) or video id(s). Can be a single string or list of strings
+        :param List[str] videos: Provide video urls.
         :returns: :class:`tiktokscraper.models.Video`
         :rtype: list
         """
-        return None
+
+        p = sync_playwright().start()
+        browser = p.chromium.launch(headless=True)
+        context = browser.new_context()
+        page = context.new_page()
+
+        video_details = []
+        for video in videos:
+            response = page.goto(video)
+            page.wait_for_function('document.documentElement.outerHTML.includes("__UNIVERSAL_DATA_FOR_REHYDRATION__")')
+
+            item_info = re.compile(r'webapp\.video-detail":{"itemInfo":(.*}),"shareMeta"')
+            result = re.findall(item_info, response.text())
+            if result:
+                result_dict = json.loads(result[0])["itemStruct"]
+                video_details.append(Video(**result_dict))
+
+        return video_details
 
     def get_videos_of_user(self, user: str) -> List[Video]:
         """Return all relevant video ids for a specific user. Provide user url or id
@@ -123,7 +141,7 @@ class TiktokScraper():
 
         # Todo: option to provide secUid instead of username
 
-        self._initialize_playwright()
+        self._initialize_browser()
 
         p = sync_playwright().start()
         browser = p.chromium.launch(headless=True)
@@ -148,14 +166,21 @@ class TiktokScraper():
         """
         return None
 
-    def get_trending_videos(self, limit_videos=10) -> List[str]:
+    def get_trending_videos(self, limit_videos=10) -> List[Video]:
         """Return video ids for current trending videos.
 
         :param int limit_videos: Maximum amount of videos
         :returns: List of video ids of trending videos
         :rtype: list
         """
-        return None
+        self._initialize_browser()
+        p = sync_playwright().start()
+        browser = p.chromium.launch(headless=True)
+        context = browser.new_context(storage_state=self.playwright_storage)
+
+        videos = get_trending_videos(context)
+
+        return videos
     
     def get_followers_for_user(self, user) -> List[str]:
         """Return followers for user. Provide user id or url

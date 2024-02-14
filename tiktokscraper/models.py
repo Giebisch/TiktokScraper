@@ -76,7 +76,7 @@ class Video():
         self.music_author = kwargs["music"]["authorName"]
         self.music_id = kwargs["music"]["id"]
         self.music_title = kwargs["music"]["title"]
-        self.music_url = kwargs["music"]["playUrl"]
+        self.music_url = kwargs["music"]["playUrl"] if "playUrl" in kwargs["music"] else None
         self.collect_count = kwargs["stats"]["collectCount"]
         self.comment_count = kwargs["stats"]["commentCount"]
         self.digg_count = kwargs["stats"]["diggCount"]
