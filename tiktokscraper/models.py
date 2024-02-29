@@ -1,5 +1,9 @@
 import datetime
 import json
+import logging
+import requests
+
+logger = logging.getLogger(__name__)
 
 class Comment():
     """Entails all relevant data concerning a specific comment
@@ -54,7 +58,7 @@ class Profile():
         self.heart = int(kwargs["stats"]["heart"])
         self.heart_count = int(kwargs["stats"]["heartCount"])
         self.video_count = int(kwargs["stats"]["videoCount"])
-        self.commerce_user = bool(kwargs["user"]["commerceUserInfo"]["commerceUser"])
+        self.commerce_user = bool(kwargs["user"]["commerceUserInfo"]["commerceUser"]) if "commerceUserInfo" in kwargs["user"] else None
         self.nickname = kwargs["user"]["nickname"]
         self.unique_id = kwargs["user"]["uniqueId"]
         self.secUid = kwargs["user"]["secUid"]
@@ -84,3 +88,12 @@ class Video():
         self.share_count = kwargs["stats"]["shareCount"]
         # not all videos provide a download adress
         self.download_url = kwargs["video"]["downloadAddr"] if "video" in kwargs and "downloadAddr" in kwargs["video"] else None
+        
+    def download(self, location):
+        if self.download_url is None:
+            logger.info("No download url available.")
+            return None
+        res = requests.get(self.download_url, stream=True)
+        with open(location, 'wb') as fd:
+            for chunk in res.iter_content(chunk_size=128):
+                fd.write(chunk)

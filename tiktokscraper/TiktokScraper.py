@@ -6,9 +6,11 @@ import time
 import re
 
 from .models import Comment, Profile, Video
-from .scraping import get_comments_from_video, get_profile_detail, get_videos_for_user, get_trending_videos
+from .scraping import get_comments_from_video, get_profile_detail, get_videos_for_user, get_trending_videos, get_followers_for_user, get_video_for_keyword
 
 from playwright.sync_api import sync_playwright
+import rookiepy
+import requests
 
 logger = logging.getLogger(__name__)
 
@@ -24,41 +26,35 @@ class TiktokScraper():
         self.user_agent = kwargs["user-agent"] if "user-agent" in kwargs else "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36"
         self.proxies = kwargs["proxies"] if "proxies" in kwargs else []
 
-        # check if we want to scrape one video or several
-        if "video" in kwargs:
-            video_kwargs = kwargs["video"]
-            if type(video_kwargs) == str:
-                self.videos = [video_kwargs]
-            else:
-                self.videos = video_kwargs
-        
-        # check if we want to scrape one profile or several
-        if "profile" in kwargs:
-            profile_kwargs = kwargs["profile"]
-            if type(profile_kwargs) == str:
-                self.profiles = [profile_kwargs]
-            else:
-                self.profiles = profile_kwargs
-
         self.playwright_storage = None
     
-    def _initialize_browser(self, sign_in=False) -> None:
+    def _initialize_browser(self, use_browser_cookies=False) -> None:
         """Opens browser to initialize context, also used to sign in.
 
         :rtype: None
         """
         if self.playwright_storage is not None:
             return
-
         p = sync_playwright().start()
-        browser = p.chromium.launch(headless=False)
-        context = browser.new_context(user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36")
-        page = context.new_page()
-        
-        page.goto("https://www.tiktok.com/@google")
-        with page.expect_response(lambda response: "verification-i18n.tiktok.com/captcha/verify?" in response.url) as response_info:
-            time.sleep(5)
+        if use_browser_cookies:
+            cookies = rookiepy.chrome(["tiktok"])
+            browser = p.chromium.launch(headless=True)
+            formatted_cookies = []
+            for cookie in cookies:
+                if cookie["expires"] is None:
+                    cookie.pop("expires", None)
+                formatted_cookies.append(cookie)
+            logger.debug(formatted_cookies)
+            context = browser.new_context()
+            context.add_cookies(formatted_cookies)
+        else:
+            browser = p.chromium.launch(headless=False)
+            context = browser.new_context(user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36")
+            page = context.new_page()
             
+            page.goto("https://www.tiktok.com/@google")
+            with page.expect_response(lambda response: "verification-i18n.tiktok.com/captcha/verify?" in response.url) as response_info:
+                time.sleep(155)
         self.playwright_storage = context.storage_state()
         browser.close()
         p.stop()
@@ -103,6 +99,10 @@ class TiktokScraper():
             profile_details.append(profile_detail)
 
         self.playwright_storage = context.storage_state()
+
+        browser.close()
+        p.stop()
+
         return profile_details
 
     def get_video_details(self, videos) -> List[Video]:
@@ -129,6 +129,9 @@ class TiktokScraper():
                 result_dict = json.loads(result[0])["itemStruct"]
                 video_details.append(Video(**result_dict))
 
+        browser.close()
+        p.stop()
+
         return video_details
 
     def get_videos_of_user(self, user: str) -> List[Video]:
@@ -153,10 +156,12 @@ class TiktokScraper():
         context, videos = get_videos_for_user(context, profile.secUid)
 
         self.playwright_storage = context.storage_state()
-        
+        browser.close()
+        p.stop()
+
         return videos
 
-    def get_videos_for_keyword(self, keyword: str, limit_videos=10) -> List[str]:
+    def get_videos_for_keyword(self, keyword: str, limit=10) -> List[str]:
         """Return video ids for a specific keyword.
 
         :param keyword: Provide keyword
@@ -164,8 +169,17 @@ class TiktokScraper():
         :returns: List of video ids for keyword
         :rtype: list
         """
-        return None
+        self._initialize_browser()
+        p = sync_playwright().start()
+        browser = p.chromium.launch(headless=True)
+        context = browser.new_context(storage_state=self.playwright_storage)
 
+        videos = get_video_for_keyword(context, keyword, limit=limit)
+        browser.close()
+        p.stop()
+
+        return videos
+    
     def get_trending_videos(self, limit_videos=10) -> List[Video]:
         """Return video ids for current trending videos.
 
@@ -179,23 +193,28 @@ class TiktokScraper():
         context = browser.new_context(storage_state=self.playwright_storage)
 
         videos = get_trending_videos(context)
+        browser.close()
+        p.stop()
 
         return videos
     
-    def get_followers_for_user(self, user) -> List[str]:
+    def get_followers_for_user(self, secUid, limit=5) -> List[Profile]:
         """Return followers for user. Provide user id or url
 
         :param str user: User id or url
         :returns: List of follower ids
         :rtype: list
         """
-        return None
+        profiles = get_followers_for_user(secUid, limit=limit)
+        return profiles
     
-    def get_user_following(self, user) -> List[str]:
-        """Return profiles the user is following. Provide user id or url
+    # ToDo: Implementation
+    
+    # def get_user_following(self, user) -> List[str]:
+    #     """Return profiles the user is following. Provide user id or url
 
-        :param str user: User id or url
-        :returns: List of following ids
-        :rtype: list
-        """
-        return None
+    #     :param str user: User id or url
+    #     :returns: List of following ids
+    #     :rtype: list
+    #     """
+    #     return None

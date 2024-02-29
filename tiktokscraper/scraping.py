@@ -109,3 +109,55 @@ def get_trending_videos(context):
         videos.append(Video(**video))
 
     return videos
+
+def get_followers_for_user(secUid, limit=0):
+    minimum_count = 0
+    maximum_count = 0
+    
+    user_set = set()
+    users = []
+
+    while True:
+        url = f"https://www.tiktok.com/api/user/list/?aid=1988&app_language=en&app_name=tiktok_web&browser_language=en-US&browser_name=Mozilla&browser_online=true&browser_platform=MacIntel&browser_version=5.0%20%28Macintosh%3B%20Intel%20Mac%20OS%20X%2010_15_7%29%20AppleWebKit%2F537.36%20%28KHTML%2C%20like%20Gecko%29%20Chrome%2F122.0.0.0%20Safari%2F537.36&channel=tiktok_web&cookie_enabled=true&count=30&device_id=7306480092313388577&device_platform=web_pc&focus_state=true&from_page=user&history_len=3&is_fullscreen=false&is_page_visible=true&maxCursor={maximum_count}&minCursor={minimum_count}&os=mac&priority_region=DE&referer=&region=DE&scene=67&screen_height=1080&screen_width=1920&secUid={secUid}&tz_name=Europe%2FBerlin&webcast_language=en&msToken="
+        
+        res = requests.get(url)
+        data = res.json()
+        count = len(user_set)
+
+        if "userList" not in data:
+            break
+        for user in data["userList"]:
+            if user["user"]["id"] not in user_set:
+                user_set.add(user["user"]["id"])
+                users.append(user)
+        if len(user_set) == count or len(user_set) >= limit:
+            break
+
+        minimum_count = data["minCursor"]
+        maximum_count = data["maxCursor"]
+
+    return [Profile(**{"userInfo": user}) for user in users[:limit]]
+
+def get_video_for_keyword(context, keyword, limit=10):
+    offset = 0
+    videos = []
+
+    search_id = ""
+    while len(videos) < limit:
+        url = f"https://www.tiktok.com/api/search/general/full/?aid=1988&app_language=en&app_name=tiktok_web&browser_language=en-US&browser_name=Mozilla&browser_online=true&browser_platform=MacIntel&browser_version=5.0%20%28Macintosh%3B%20Intel%20Mac%20OS%20X%2010_15_7%29%20AppleWebKit%2F537.36%20%28KHTML%2C%20like%20Gecko%29%20Chrome%2F122.0.0.0%20Safari%2F537.36&channel=tiktok_web&cookie_enabled=true&device_id=7306480092313388577&device_platform=web_pc&device_type=web_h264&focus_state=true&from_page=search&history_len=2&is_fullscreen=false&is_page_visible=true&keyword={keyword}&offset={offset}&os=mac&priority_region=DE&referer=&region=DE&screen_height=1080&screen_width=1920{search_id}&search_source=normal_search&tz_name=Europe%2FBerlin&verifyFp=verify_lpcd5t5g_uud5fNlz_2Qyz_4mwf_B8vu_No3ej4Amte7Z&web_search_code=%7B%22tiktok%22%3A%7B%22client_params_x%22%3A%7B%22search_engine%22%3A%7B%22ies_mt_user_live_video_card_use_libra%22%3A1%2C%22mt_search_general_user_live_card%22%3A1%7D%7D%2C%22search_server%22%3A%7B%7D%7D%7D&webcast_language=en&msToken="
+
+        page = context.new_page()
+        response = page.goto(url).json()
+
+        logger.debug(url)
+        for video in response["data"]:
+            if video["type"] != 1:
+                continue
+            videos.append(Video(**video["item"]))
+        offset = response["cursor"]
+        search_id = "&search_id=" + response["extra"]["logid"]
+        logger.debug(len(videos))
+        if response["has_more"] == 0:
+            break
+
+    return videos
