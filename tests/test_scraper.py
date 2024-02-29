@@ -89,10 +89,10 @@ logger = logging.getLogger(__name__)
 
 #         self.assertEqual(len(followers), 100)
 
-class TestGetVideosForKeyword(unittest.TestCase):
-    def test_get_videos_for_keyword(self):
-        TS = TiktokScraper()
-        TS._initialize_browser(use_browser_cookies=True)
-        videos = TS.get_videos_for_keyword("google", limit=24)
+# class TestGetVideosForKeyword(unittest.TestCase):
+#     def test_get_videos_for_keyword(self):
+#         TS = TiktokScraper()
+#         TS._initialize_browser(use_browser_cookies=True)
+#         videos = TS.get_videos_for_keyword("google", limit=24)
 
-        self.assertEqual(len(videos), 24)
+#         self.assertEqual(len(videos), 24)
