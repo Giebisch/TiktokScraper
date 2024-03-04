@@ -7,7 +7,8 @@ TiktokScraper
 
 Introduction
 ------------
-This packages helps you scrape various Tiktok data
+This packages helps you scrape various Tiktok data.
+Possible to use in code and via GUI in browser.
 
 Prerequisites
 -------------
@@ -21,7 +22,7 @@ User Guide
 How to Install
 ++++++++++++++
 
-Stable release (not available yet)
+Stable release
 ``````````````````````````````````
 
 To install TiktokScraper, run this command in your terminal:
