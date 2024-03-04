@@ -9,9 +9,10 @@ Index
 
    01_about
    02_usage
-   03_source
-   04_authors
-   05_contributing
+   03_examples
+   04_source
+   05_authors
+   06_contributing
 
    
 Indices and tables
