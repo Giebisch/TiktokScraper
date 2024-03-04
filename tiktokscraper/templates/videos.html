@@ -1,0 +1,9 @@
+{% for video in videos %}
+    <div class="card bg-light mb-3 mx-auto text-left">
+        <div class="card-header">Video-ID:{{ video.id }}</div>
+        <div class="card-body">
+        <h5 class="card-title">{{ video.description}}</h5>
+        <p class="card-text">{{ video.play_count }} plays, {{ video.shares }} shares, {{ video.comment_count }} comments</p>
+        </div>
+    </div>
+{% endfor %}

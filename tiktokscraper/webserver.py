@@ -1,10 +1,14 @@
 import pprint
 from threading import Thread
+import logging
 from flask import Flask, render_template, request
 from .TiktokScraper import TiktokScraper
 
+logger = logging.getLogger(__name__)
+
 app = Flask(__name__)
 TS = TiktokScraper()
+TS._initialize_browser(use_browser_cookies=True)
 
 @app.route("/")
 def index():
@@ -15,15 +19,15 @@ def get_result():
     global TS
     feature = request.args.get("feature")
     id = request.args.get("id")
-    format = request.args.get("format")
+    # format = request.args.get("format")
 
     if feature == "comments":
         comments = TS.get_comments(**{"videos": id})[0]
-        if format == "JSON":
-            json = [pprint.pformat(c.json()).replace("\n", "<br>") for c in comments]
-            json = "<br>".join(json)
-            return render_template('json.html', json=json)
         return render_template('comments.html', comments=comments)
+    
+    if feature == "videos":
+        videos = TS.get_videos_for_keyword(id)
+        return render_template('videos.html', videos=videos)
     
     if feature == "profile":
         p = [x.strip() for x in id.split(",")]
