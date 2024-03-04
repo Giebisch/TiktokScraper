@@ -1,9 +1,8 @@
 Examples
 ========
 
-Example code for how to use this package
+.. code-block::
 
-.. code-block:: python
     from tiktokscraper.TiktokScraper import TiktokScraper
 
     # create TiktokScraper object

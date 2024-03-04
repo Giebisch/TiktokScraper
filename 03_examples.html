@@ -81,7 +81,69 @@
              
   <section id="examples">
 <h1>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h1>
-<p>Example code for how to use this package</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tiktokscraper.TiktokScraper</span> <span class="kn">import</span> <span class="n">TiktokScraper</span>
+
+<span class="c1"># create TiktokScraper object</span>
+<span class="n">TS</span> <span class="o">=</span> <span class="n">TiktokScraper</span><span class="p">()</span>
+
+<span class="c1"># ========================================================</span>
+<span class="c1"># using the following functions is possible without login</span>
+<span class="c1"># ========================================================</span>
+
+<span class="c1"># get comments from single video</span>
+<span class="n">comments</span> <span class="o">=</span> <span class="n">TS</span><span class="o">.</span><span class="n">get_comments</span><span class="p">(</span><span class="s2">&quot;https://www.tiktok.com/@google/video/7291741762278739242&quot;</span><span class="p">,</span> <span class="n">limit_comments</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+
+<span class="c1"># get comments from several different videos</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">TS</span><span class="o">.</span><span class="n">get_comments</span><span class="p">([</span><span class="s2">&quot;https://www.tiktok.com/@google/video/7291741762278739242&quot;</span><span class="p">,</span> <span class="s2">&quot;https://www.tiktok.com/@google/video/7286921045720730926&quot;</span><span class="p">],</span> <span class="n">limit_comments</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+
+<span class="c1"># print comment texts</span>
+<span class="k">for</span> <span class="n">video</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">comment</span> <span class="ow">in</span> <span class="n">video</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+
+<span class="c1"># get video details</span>
+<span class="n">video_details</span> <span class="o">=</span> <span class="n">TS</span><span class="o">.</span><span class="n">get_video_details</span><span class="p">([</span><span class="s2">&quot;https://www.tiktok.com/@google/video/7291741762278739242&quot;</span><span class="p">,</span> <span class="s2">&quot;https://www.tiktok.com/@google/video/7286921045720730926&quot;</span><span class="p">])</span>
+
+<span class="c1"># print video details</span>
+<span class="k">for</span> <span class="n">video</span> <span class="ow">in</span> <span class="n">video_details</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">video</span><span class="o">.</span><span class="n">description</span><span class="p">,</span> <span class="n">video</span><span class="o">.</span><span class="n">play_count</span><span class="p">)</span>
+
+<span class="c1"># get followers for user</span>
+<span class="c1"># can only use secUid for user. Use get_profile_details first to get this information</span>
+<span class="c1"># Here is an example for Google</span>
+<span class="n">secUid</span> <span class="o">=</span> <span class="s2">&quot;MS4wLjABAAAABqImMisT8O3jtr2Ufg4t7wTYypL4gPC9rWRrIkkThwCgCVMRJW6ls-n2T6bmDMZb&quot;</span>
+<span class="n">followers</span> <span class="o">=</span> <span class="n">TS</span><span class="o">.</span><span class="n">get_followers_for_user</span><span class="p">(</span><span class="n">secUid</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">follower</span> <span class="ow">in</span> <span class="n">followers</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">follower</span><span class="o">.</span><span class="n">follower_count</span><span class="p">)</span>
+
+<span class="c1"># ====================================================================================</span>
+<span class="c1"># for the following functions you need to either be logged in or manually get msTokens</span>
+<span class="c1"># ====================================================================================</span>
+
+<span class="c1"># used to log in</span>
+<span class="c1"># if use_browser_cookies is set to True, cookies from your browser are used and you dont have</span>
+<span class="c1"># to do anything additionally</span>
+<span class="n">TS</span><span class="o">.</span><span class="n">_initialize_browser</span><span class="p">(</span><span class="n">use_browser_cookies</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Profile details</span>
+<span class="n">profiles</span> <span class="o">=</span> <span class="n">TS</span><span class="o">.</span><span class="n">get_profile_details</span><span class="p">([</span><span class="s2">&quot;google&quot;</span><span class="p">,</span> <span class="s2">&quot;microsoft&quot;</span><span class="p">])</span>
+<span class="k">for</span> <span class="n">profile</span> <span class="ow">in</span> <span class="n">profiles</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">profile</span><span class="o">.</span><span class="n">follower_count</span><span class="p">)</span>
+
+<span class="c1"># videos of user</span>
+<span class="n">videos</span> <span class="o">=</span> <span class="n">TS</span><span class="o">.</span><span class="n">get_videos_of_user</span><span class="p">(</span><span class="s2">&quot;google&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">video</span> <span class="ow">in</span> <span class="n">videos</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">video</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">video</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
+    <span class="c1"># example to download video</span>
+    <span class="c1"># video.download(f&quot;{video.id}.mp4&quot;)</span>
+
+<span class="c1"># get recommended / trending videos</span>
+<span class="n">videos</span> <span class="o">=</span> <span class="n">TS</span><span class="o">.</span><span class="n">get_trending_videos</span><span class="p">(</span><span class="n">limit_videos</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="c1"># get videos for keyword</span>
+<span class="n">videos</span> <span class="o">=</span> <span class="n">TS</span><span class="o">.</span><span class="n">get_videos_for_keyword</span><span class="p">(</span><span class="s2">&quot;google&quot;</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">24</span><span class="p">)</span>
+</pre></div>
+</div>
 </section>
 
 
