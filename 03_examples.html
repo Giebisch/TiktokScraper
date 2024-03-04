@@ -82,67 +82,6 @@
   <section id="examples">
 <h1>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h1>
 <p>Example code for how to use this package</p>
-<p>``
-from tiktokscraper.TiktokScraper import TiktokScraper</p>
-<p># create TiktokScraper object
-TS = TiktokScraper()</p>
-<p># ========================================================
-# using the following functions is possible without login
-# ========================================================</p>
-<p># get comments from single video
-comments = TS.get_comments(”<a class="reference external" href="https://www.tiktok.com/&#64;google/video/7291741762278739242">https://www.tiktok.com/&#64;google/video/7291741762278739242</a>”, limit_comments=50)</p>
-<p># get comments from several different videos
-result = TS.get_comments([”<a class="reference external" href="https://www.tiktok.com/&#64;google/video/7291741762278739242">https://www.tiktok.com/&#64;google/video/7291741762278739242</a>”, “<a class="reference external" href="https://www.tiktok.com/&#64;google/video/7286921045720730926">https://www.tiktok.com/&#64;google/video/7286921045720730926</a>”], limit_comments=50)</p>
-<p># print comment texts
-for video in result:</p>
-<blockquote>
-<div><dl class="simple">
-<dt>for comment in video:</dt><dd><p>print(comment.text)</p>
-</dd>
-</dl>
-</div></blockquote>
-<p># get video details
-video_details = TS.get_video_details([”<a class="reference external" href="https://www.tiktok.com/&#64;google/video/7291741762278739242">https://www.tiktok.com/&#64;google/video/7291741762278739242</a>”, “<a class="reference external" href="https://www.tiktok.com/&#64;google/video/7286921045720730926">https://www.tiktok.com/&#64;google/video/7286921045720730926</a>”])</p>
-<p># print video details
-for video in video_details:</p>
-<blockquote>
-<div><p>print(video.description, video.play_count)</p>
-</div></blockquote>
-<p># get followers for user
-# can only use secUid for user. Use get_profile_details first to get this information
-# Here is an example for Google
-secUid = “MS4wLjABAAAABqImMisT8O3jtr2Ufg4t7wTYypL4gPC9rWRrIkkThwCgCVMRJW6ls-n2T6bmDMZb”
-followers = TS.get_followers_for_user(secUid, limit=30)
-for follower in followers:</p>
-<blockquote>
-<div><p>print(follower.follower_count)</p>
-</div></blockquote>
-<p># ====================================================================================
-# for the following functions you need to either be logged in or manually get msTokens
-# ====================================================================================</p>
-<p># used to log in
-# if use_browser_cookies is set to True, cookies from your browser are used and you dont have
-# to do anything additionally
-TS._initialize_browser(use_browser_cookies=True)</p>
-<p># Profile details
-profiles = TS.get_profile_details([“google”, “microsoft”])
-for profile in profiles:</p>
-<blockquote>
-<div><p>print(profile.follower_count)</p>
-</div></blockquote>
-<p># videos of user
-videos = TS.get_videos_of_user(“google”)
-for video in videos:</p>
-<blockquote>
-<div><p>print(video.id, video.description)
-# example to download video
-# video.download(f”{video.id}.mp4”)</p>
-</div></blockquote>
-<p># get recommended / trending videos
-videos = TS.get_trending_videos(limit_videos=5)</p>
-<p># get videos for keyword
-videos = TS.get_videos_for_keyword(“google”, limit=24)
-``</p>
 </section>
 
 
