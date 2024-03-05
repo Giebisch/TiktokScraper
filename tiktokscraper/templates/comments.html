@@ -1,3 +1,51 @@
+
+
+<div class="container mx-auto mb-3">
+<table class="table-auto border border-collapse border-gray-400 mx-auto">
+    <tbody>
+    <tr>
+        <td class="border border-gray-400 p-2">Average character length of comments</td>
+        <td class="border border-gray-400 p-2">{{ stats.average_character_length }}</td>
+    </tr>
+    <tr>
+        <td class="border border-gray-400 p-2">Average amount of words in comments</td>
+        <td class="border border-gray-400 p-2">{{ stats.average_amount_words }}</td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+<div style="width: 510px;" class="mx-auto mb-3">
+    <canvas id="wordChart"></canvas>
+</div>
+
+<script>
+    const ctx = document.getElementById('wordChart');
+    ctx.width = 510;
+
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+            {% autoescape false %}
+        labels: {{ stats.labels|safe }},
+            {% endautoescape %}
+        datasets: [{
+          label: '# of occurences',
+          data: {{ stats.data }},
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        },
+        responsive: true,
+      }
+    });
+  </script>
+
 {% for comment in comments %}
     <div class="card bg-light mb-3 mx-auto text-left">
         <div class="card-header">{{ comment.create_time }}</div>

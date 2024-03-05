@@ -1,6 +1,8 @@
 import pprint
 from threading import Thread
 import logging
+from statistics import mean 
+from collections import Counter
 from flask import Flask, render_template, request
 from .TiktokScraper import TiktokScraper
 
@@ -22,8 +24,26 @@ def get_result():
     # format = request.args.get("format")
 
     if feature == "comments":
+        # get comments first
         comments = TS.get_comments(**{"videos": id})[0]
-        return render_template('comments.html', comments=comments)
+
+        # calculate stats
+        average_character_length = mean([len(c.text) for c in comments])
+        average_amount_words = mean([len(c.text.split(" ")) for c in comments])
+        total_text = ""
+        for comment in comments:
+            total_text = total_text + " " + comment.text
+        most_common_words = Counter(total_text.split(" ")).most_common(10)
+        labels, data = list(zip(*most_common_words))
+
+        stats = {
+            "average_amount_words": average_amount_words,
+            "average_character_length": average_character_length,
+            "labels": list(labels),
+            "data": list(data),
+        }
+
+        return render_template('comments.html', comments=comments, stats=stats)
     
     if feature == "videos":
         videos = TS.get_videos_for_keyword(id)
