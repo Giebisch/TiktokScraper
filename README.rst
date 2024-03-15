@@ -29,7 +29,6 @@ To install TiktokScraper, run this command in your terminal:
 
 .. code-block:: console
 
-    $ pip install tiktokscraper
     $ python -m playwright install
     $ pip install playwright
     $ playwright install
