@@ -36,7 +36,7 @@ def get_comments_from_video(user_agent, proxies, video_link, limit_comments):
             break
     return comments
 
-def get_profile_detail(context, profile):
+async def get_profile_detail(context, profile):
     """
     Return profile details for given unique ID
     """
@@ -47,7 +47,7 @@ def get_profile_detail(context, profile):
     elif "/" in profile:
         profile = profile.split("/")[-1][1:]
 
-    page = context.new_page()
+    page = await context.new_page()
     api_request_context = context.request
 
     url = f"https://www.tiktok.com/api/user/detail/?WebIdLastTime=1707251748&aid=1988&app_language=en&app_name=tiktok_web&browser_language=en-US&browser_name=Mozilla&browser_online=true&browser_platform=MacIntel&browser_version=5.0%20%28Macintosh%3B%20Intel%20Mac%20OS%20X%2010_15_7%29%20AppleWebKit%2F537.36%20%28KHTML%2C%20like%20Gecko%29%20Chrome%2F121.0.0.0%20Safari%2F537.36&channel=tiktok_web&cookie_enabled=true&device_id=7332590289297786400&device_platform=web_pc&focus_state=true&from_page=user&history_len=3&is_fullscreen=false&is_page_visible=true&language=en&os=mac&priority_region=&referer=&region=DE&screen_height=1080&screen_width=1920&tz_name=Europe%2FBerlin&uniqueId={profile}&webcast_language=en&msToken="
@@ -59,7 +59,7 @@ def get_profile_detail(context, profile):
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"
     }
 
-    response = api_request_context.get(final_url, headers=headers)
+    response = await api_request_context.get(final_url, headers=headers)
 
     try:
         data = response.json()
@@ -71,11 +71,11 @@ def get_profile_detail(context, profile):
 
     return context, Profile(**data)
 
-def get_videos_for_user(context, secUid):
+async def get_videos_for_user(context, secUid):
     """
     Returns videos for user using their secUid. If secUid is not available, use get_profile_detail() first
     """
-    page = context.new_page()
+    page = await context.new_page()
     api_request_context = context.request
 
     url = f"https://www.tiktok.com/api/post/item_list/?WebIdLastTime=1701172473&aid=1988&app_language=en&app_name=tiktok_web&browser_language=en-US&browser_name=Mozilla&browser_online=true&browser_platform=MacIntel&browser_version=5.0%20%28Macintosh%3B%20Intel%20Mac%20OS%20X%2010_15_7%29%20AppleWebKit%2F537.36%20%28KHTML%2C%20like%20Gecko%29%20Chrome%2F121.0.0.0%20Safari%2F537.36&channel=tiktok_web&cookie_enabled=true&count=35&coverFormat=2&cursor=0&device_id=7306480092313388577&device_platform=web_pc&focus_state=true&from_page=user&history_len=1&is_fullscreen=false&is_page_visible=true&language=en&os=mac&priority_region=DE&referer=&region=DE&screen_height=1080&screen_width=1920&secUid={secUid}&tz_name=Europe%2FBerlin&verifyFp=verify_lpcd5t5g_uud5fNlz_2Qyz_4mwf_B8vu_No3ej4Amte7Z&webcast_language=en&msToken="
@@ -83,7 +83,7 @@ def get_videos_for_user(context, secUid):
     xbogus = calculate_xbogus(page, url, None)
     final_url = url + "&X-Bogus=" + xbogus
 
-    response = page.goto(final_url)
+    response = await page.goto(final_url)
 
     try:
         data = response.json()
@@ -98,11 +98,11 @@ def get_videos_for_user(context, secUid):
 
     return context, videos
 
-def get_trending_videos(context):
+async def get_trending_videos(context):
     url = "https://www.tiktok.com/api/explore/item_list/?WebIdLastTime=1707869418&aid=1988&app_language=en&app_name=tiktok_web&browser_language=en-US&browser_name=Mozilla&browser_online=true&browser_platform=MacIntel&browser_version=5.0%20%28Macintosh%3B%20Intel%20Mac%20OS%20X%2010_15_7%29%20AppleWebKit%2F537.36%20%28KHTML%2C%20like%20Gecko%29%20Chrome%2F121.0.0.0%20Safari%2F537.36&categoryType=119&channel=tiktok_web&cookie_enabled=true&count=16&device_platform=web_pc&focus_state=true&from_page=&history_len=2&is_fullscreen=false&is_page_visible=true&language=en&os=mac&priority_region=&referer=&region=DE&screen_height=1080&screen_width=1920&tz_name=Europe%2FBerlin&webcast_language=en"
 
-    page = context.new_page()
-    response = page.goto(url).json()
+    page = await context.new_page()
+    response = await page.goto(url).json()
 
     videos = []
     for video in response["itemList"]:
@@ -138,7 +138,7 @@ def get_followers_for_user(secUid, limit=0):
 
     return [Profile(**{"userInfo": user}) for user in users[:limit]]
 
-def get_video_for_keyword(context, keyword, limit=10):
+async def get_video_for_keyword(context, keyword, limit=10):
     offset = 0
     videos = []
 
@@ -146,8 +146,8 @@ def get_video_for_keyword(context, keyword, limit=10):
     while len(videos) < limit:
         url = f"https://www.tiktok.com/api/search/general/full/?aid=1988&app_language=en&app_name=tiktok_web&browser_language=en-US&browser_name=Mozilla&browser_online=true&browser_platform=MacIntel&browser_version=5.0%20%28Macintosh%3B%20Intel%20Mac%20OS%20X%2010_15_7%29%20AppleWebKit%2F537.36%20%28KHTML%2C%20like%20Gecko%29%20Chrome%2F122.0.0.0%20Safari%2F537.36&channel=tiktok_web&cookie_enabled=true&device_id=7306480092313388577&device_platform=web_pc&device_type=web_h264&focus_state=true&from_page=search&history_len=2&is_fullscreen=false&is_page_visible=true&keyword={keyword}&offset={offset}&os=mac&priority_region=DE&referer=&region=DE&screen_height=1080&screen_width=1920{search_id}&search_source=normal_search&tz_name=Europe%2FBerlin&verifyFp=verify_lpcd5t5g_uud5fNlz_2Qyz_4mwf_B8vu_No3ej4Amte7Z&web_search_code=%7B%22tiktok%22%3A%7B%22client_params_x%22%3A%7B%22search_engine%22%3A%7B%22ies_mt_user_live_video_card_use_libra%22%3A1%2C%22mt_search_general_user_live_card%22%3A1%7D%7D%2C%22search_server%22%3A%7B%7D%7D%7D&webcast_language=en&msToken="
 
-        page = context.new_page()
-        response = page.goto(url).json()
+        page = await context.new_page()
+        response = await page.goto(url).json()
 
         logger.debug(url)
         for video in response["data"]:

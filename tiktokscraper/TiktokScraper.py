@@ -8,7 +8,7 @@ import re
 from .models import Comment, Profile, Video
 from .scraping import get_comments_from_video, get_profile_detail, get_videos_for_user, get_trending_videos, get_followers_for_user, get_video_for_keyword
 
-from playwright.sync_api import sync_playwright
+from playwright.async_api import async_playwright
 import rookiepy
 import requests
 
@@ -28,36 +28,36 @@ class TiktokScraper():
 
         self.playwright_storage = None
     
-    def _initialize_browser(self, use_browser_cookies=False) -> None:
+    async def _initialize_browser(self, use_browser_cookies=False) -> None:
         """Opens browser to initialize context, also used to sign in.
 
         :rtype: None
         """
         if self.playwright_storage is not None:
             return
-        p = sync_playwright().start()
+        p = await async_playwright().start()
         if use_browser_cookies:
             cookies = rookiepy.chrome(["tiktok"])
-            browser = p.chromium.launch(headless=True)
+            browser = await p.chromium.launch(headless=True)
             formatted_cookies = []
             for cookie in cookies:
                 if cookie["expires"] is None:
                     cookie.pop("expires", None)
                 formatted_cookies.append(cookie)
             logger.debug(formatted_cookies)
-            context = browser.new_context()
+            context = await browser.new_context()
             context.add_cookies(formatted_cookies)
         else:
-            browser = p.chromium.launch(headless=False)
-            context = browser.new_context(user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36")
-            page = context.new_page()
+            browser = await p.chromium.launch(headless=False)
+            context = await browser.new_context(user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36")
+            page = await context.new_page()
             
             page.goto("https://www.tiktok.com/@google")
             with page.expect_response(lambda response: "verification-i18n.tiktok.com/captcha/verify?" in response.url) as response_info:
                 time.sleep(155)
         self.playwright_storage = context.storage_state()
-        browser.close()
-        p.stop()
+        await browser.close()
+        await p.stop()
         
     def get_comments(self, videos, limit_comments=50) -> List[Comment]:
         """Scrape comments from a specific video. Provide video url(s) or video id(s)
@@ -77,7 +77,7 @@ class TiktokScraper():
             comments.append(get_comments_from_video(self.user_agent, self.proxies, video, limit_comments))
         return comments
 
-    def get_profile_details(self, profiles) -> List[Profile]:
+    async def get_profile_details(self, profiles) -> List[Profile]:
         """Scrape all information regarding a specific profile. Provide profile url(s) or username(s)
         
         :param List[str] profiles: Provide profile url(s) or profile id(s). Can be a single string or list of strings
@@ -87,25 +87,25 @@ class TiktokScraper():
         if type(profiles) == str:
             profiles = [profiles]
 
-        self._initialize_browser()
+        await self._initialize_browser()
 
-        p = sync_playwright().start()
-        browser = p.chromium.launch(headless=True)
-        context = browser.new_context(storage_state=self.playwright_storage)
+        p = await async_playwright().start()
+        browser = await p.chromium.launch(headless=True)
+        context = await browser.new_context(storage_state=self.playwright_storage)
 
         profile_details = []
         for profile in profiles:
-            context, profile_detail = get_profile_detail(context, profile)
+            context, profile_detail = await get_profile_detail(context, profile)
             profile_details.append(profile_detail)
 
-        self.playwright_storage = context.storage_state()
+        self.playwright_storage = await context.storage_state()
 
-        browser.close()
-        p.stop()
+        await browser.close()
+        await p.stop()
 
         return profile_details
 
-    def get_video_details(self, videos) -> List[Video]:
+    async def get_video_details(self, videos) -> List[Video]:
         """Scrape all relevant details from a specific video. Provide video urls
 
         :param List[str] videos: Provide video urls.
@@ -113,15 +113,15 @@ class TiktokScraper():
         :rtype: list
         """
 
-        p = sync_playwright().start()
-        browser = p.chromium.launch(headless=True)
-        context = browser.new_context()
-        page = context.new_page()
+        p = await async_playwright().start()
+        browser = await p.chromium.launch(headless=True)
+        context = await browser.new_context()
+        page = await context.new_page()
 
         video_details = []
         for video in videos:
-            response = page.goto(video)
-            page.wait_for_function('document.documentElement.outerHTML.includes("__UNIVERSAL_DATA_FOR_REHYDRATION__")')
+            response = await page.goto(video)
+            await page.wait_for_function('document.documentElement.outerHTML.includes("__UNIVERSAL_DATA_FOR_REHYDRATION__")')
 
             item_info = re.compile(r'webapp\.video-detail":{"itemInfo":(.*}),"shareMeta"')
             result = re.findall(item_info, response.text())
@@ -129,12 +129,12 @@ class TiktokScraper():
                 result_dict = json.loads(result[0])["itemStruct"]
                 video_details.append(Video(**result_dict))
 
-        browser.close()
-        p.stop()
+        await browser.close()
+        await p.stop()
 
         return video_details
 
-    def get_videos_of_user(self, user: str) -> List[Video]:
+    async def get_videos_of_user(self, user: str) -> List[Video]:
         """Return all relevant video ids for a specific user. Provide user url or id
 
         :param user: Provide user url or id
@@ -144,24 +144,24 @@ class TiktokScraper():
 
         # Todo: option to provide secUid instead of username
 
-        self._initialize_browser()
+        await self._initialize_browser()
 
-        p = sync_playwright().start()
-        browser = p.chromium.launch(headless=True)
-        context = browser.new_context(storage_state=self.playwright_storage)
+        p = await async_playwright().start()
+        browser = await p.chromium.launch(headless=True)
+        context = await browser.new_context(storage_state=self.playwright_storage)
 
-        context, profile = get_profile_detail(context, user)
+        context, profile = await get_profile_detail(context, user)
 
-        context = browser.new_context(user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36")
-        context, videos = get_videos_for_user(context, profile.secUid)
+        context = await browser.new_context(user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36")
+        context, videos = await get_videos_for_user(context, profile.secUid)
 
-        self.playwright_storage = context.storage_state()
-        browser.close()
-        p.stop()
+        self.playwright_storage = await context.storage_state()
+        await browser.close()
+        await p.stop()
 
         return videos
 
-    def get_videos_for_keyword(self, keyword: str, limit=10) -> List[str]:
+    async def get_videos_for_keyword(self, keyword: str, limit=10) -> List[str]:
         """Return video ids for a specific keyword.
 
         :param keyword: Provide keyword
@@ -169,32 +169,32 @@ class TiktokScraper():
         :returns: List of video ids for keyword
         :rtype: list
         """
-        self._initialize_browser()
-        p = sync_playwright().start()
-        browser = p.chromium.launch(headless=True)
-        context = browser.new_context(storage_state=self.playwright_storage)
+        await self._initialize_browser()
+        p = await async_playwright().start()
+        browser = await p.chromium.launch(headless=True)
+        context = await browser.new_context(storage_state=self.playwright_storage)
 
-        videos = get_video_for_keyword(context, keyword, limit=limit)
-        browser.close()
-        p.stop()
+        videos = await get_video_for_keyword(context, keyword, limit=limit)
+        await browser.close()
+        await p.stop()
 
         return videos
     
-    def get_trending_videos(self, limit_videos=10) -> List[Video]:
+    async def get_trending_videos(self, limit_videos=10) -> List[Video]:
         """Return video ids for current trending videos.
 
         :param int limit_videos: Maximum amount of videos
         :returns: List of video ids of trending videos
         :rtype: list
         """
-        self._initialize_browser()
-        p = sync_playwright().start()
-        browser = p.chromium.launch(headless=True)
-        context = browser.new_context(storage_state=self.playwright_storage)
+        await self._initialize_browser()
+        p = await async_playwright().start()
+        browser = await p.chromium.launch(headless=True)
+        context = await browser.new_context(storage_state=self.playwright_storage)
 
-        videos = get_trending_videos(context)
-        browser.close()
-        p.stop()
+        videos = await get_trending_videos(context)
+        await browser.close()
+        await p.stop()
 
         return videos
     
@@ -207,14 +207,3 @@ class TiktokScraper():
         """
         profiles = get_followers_for_user(secUid, limit=limit)
         return profiles
-    
-    # ToDo: Implementation
-    
-    # def get_user_following(self, user) -> List[str]:
-    #     """Return profiles the user is following. Provide user id or url
-
-    #     :param str user: User id or url
-    #     :returns: List of following ids
-    #     :rtype: list
-    #     """
-    #     return None
