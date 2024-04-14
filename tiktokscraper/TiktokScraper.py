@@ -140,9 +140,9 @@ class TiktokScraper():
         return video_details
 
     async def get_videos_of_user(self, user: str) -> List[Video]:
-        """Return all relevant video ids for a specific user. Provide user url or id
+        """Return all relevant video ids for a specific user. Provide username
 
-        :param user: Provide user url or id
+        :param user: Provide username
         :returns: List of videos of user
         :rtype: list
         """
@@ -188,7 +188,6 @@ class TiktokScraper():
     async def get_trending_videos(self, limit_videos=10) -> List[Video]:
         """Return video ids for current trending videos.
 
-        :param int limit_videos: Maximum amount of videos
         :returns: List of video ids of trending videos
         :rtype: list
         """
@@ -204,10 +203,11 @@ class TiktokScraper():
         return videos
     
     def get_followers_for_user(self, secUid, limit=5) -> List[Profile]:
-        """Return followers for user. Provide user id or url
+        """Return followers for user. Provide secUid and optional limit
 
-        :param str user: User id or url
-        :returns: List of follower ids
+        :param str secUid: secUid
+        :param int limit: Limit number of followers
+        :returns: List of Profiles
         :rtype: list
         """
         profiles = get_followers_for_user(secUid, limit=limit)

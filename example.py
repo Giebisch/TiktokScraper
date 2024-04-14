@@ -41,7 +41,7 @@ async def example_function():
     # used to log in
     # if use_browser_cookies is set to True, cookies from your browser are used and you dont have
     # to do anything additionally
-    await TS._initialize_browser(use_browser_cookies=True)
+    await TS._initialize_browser(use_browser_cookies=True, browser="firefox")
 
     # Profile details
     profiles = await TS.get_profile_details(["google", "microsoft"])

@@ -71,6 +71,18 @@ class Video():
 
     :ivar str video_id: Video ID
     :ivar str description: Description
+    :ivar int create_time: Creat time
+    :ivar bool is_pinned: Is pinned
+    :ivar str music_author: Music author name
+    :ivar str music_id: Music id
+    :ivar str music_title: Music title
+    :ivar str music_url: Music URL
+    :ivar int collect_count: Collect count
+    :ivar int comment_count: Comment count
+    :ivar int digg_count: Digg Count
+    :ivar int play_count: Play count
+    :ivar int share_count: Share count
+    :ivar str download_url: Download URL
     """
     def __init__(self, **kwargs):
         self.id = kwargs["id"]
