@@ -46,16 +46,16 @@ class TiktokScraper():
                 formatted_cookies.append(cookie)
             logger.debug(formatted_cookies)
             context = await browser.new_context()
-            context.add_cookies(formatted_cookies)
+            await context.add_cookies(formatted_cookies)
         else:
             browser = await p.chromium.launch(headless=False)
             context = await browser.new_context(user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36")
             page = await context.new_page()
             
-            page.goto("https://www.tiktok.com/@google")
-            with page.expect_response(lambda response: "verification-i18n.tiktok.com/captcha/verify?" in response.url) as response_info:
+            await page.goto("https://www.tiktok.com/@google")
+            with await page.expect_response(lambda response: "verification-i18n.tiktok.com/captcha/verify?" in response.url) as response_info:
                 time.sleep(155)
-        self.playwright_storage = context.storage_state()
+        self.playwright_storage = await context.storage_state()
         await browser.close()
         await p.stop()
         
@@ -124,7 +124,7 @@ class TiktokScraper():
             await page.wait_for_function('document.documentElement.outerHTML.includes("__UNIVERSAL_DATA_FOR_REHYDRATION__")')
 
             item_info = re.compile(r'webapp\.video-detail":{"itemInfo":(.*}),"shareMeta"')
-            result = re.findall(item_info, response.text())
+            result = re.findall(item_info, await response.text())
             if result:
                 result_dict = json.loads(result[0])["itemStruct"]
                 video_details.append(Video(**result_dict))

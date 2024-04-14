@@ -2,6 +2,10 @@ import unittest
 from argparse import Namespace
 from tiktokscraper.TiktokScraper import TiktokScraper
 import logging
+import asyncio
+import pytest
+
+# pytest_plugins = ('pytest_asyncio',)
 
 logger = logging.getLogger(__name__)
 
@@ -71,14 +75,19 @@ logger = logging.getLogger(__name__)
 #         for video in videos:
 #             self.assertGreater(video.play_count, 100)
 
-# class TestGetTrending(unittest.TestCase):
-#     async def test_get_trending_videos(self):
-#         TS = TiktokScraper()
-#         await TS._initialize_browser(use_browser_cookies=True)
-#         videos = await TS.get_trending_videos()
+class TestGetTrending(unittest.TestCase):
+    @pytest.mark.asyncio
+    async def test_get_trending_videos(self):
+        TS = TiktokScraper()
+        await TS._initialize_browser(use_browser_cookies=True)
+        videos = await TS.get_trending_videos()
+
+        logger.debug("Videos: ", videos)
         
-#         self.assertGreater(len(videos), 0)
-#         self.assertGreater(videos[0].play_count, 10)
+        self.assertGreater(len(videos), 0)
+        self.assertGreater(videos[0].play_count, 10)
+
+        return videos
 
 # class TestGetFollowersForUser(unittest.TestCase):
 #     def test_get_followers(self):
