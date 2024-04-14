@@ -2,6 +2,10 @@ import unittest
 from argparse import Namespace
 from tiktokscraper.TiktokScraper import TiktokScraper
 import logging
+import asyncio
+import pytest
+
+# pytest_plugins = ('pytest_asyncio',)
 
 logger = logging.getLogger(__name__)
 
@@ -21,11 +25,11 @@ logger = logging.getLogger(__name__)
 #         self.assertTrue(len(comments[0]) > 0)
 
 # class TestProfile(unittest.TestCase):
-#     def test_profile(self):
+#     async def test_profile(self):
 #         TS = TiktokScraper()
-#         TS._initialize_browser(use_browser_cookies=True)
+#         await TS._initialize_browser(use_browser_cookies=True)
 #         args = {"profiles": ["google", "microsoft"]}
-#         profile = TS.get_profile_details(**args)
+#         profile = await TS.get_profile_details(**args)
 
 #         logger.debug(profile)
 #         logger.debug(profile[0].__dict__)
@@ -35,16 +39,16 @@ logger = logging.getLogger(__name__)
 #         self.assertEqual(profile[0].nickname, "Google")
 #         self.assertTrue(profile[0].verified)
 
-#         profile = TS.get_profile_details(**{"profiles": ["samsung"]})
+#         profile = await TS.get_profile_details(**{"profiles": ["samsung"]})
                                             
 #         logger.debug(profile)
 #         self.assertEqual(profile[0].nickname, "Samsung")
 
 # class TestVideosOfUser(unittest.TestCase):
-#     def test_videos(self):
+#     async def test_videos(self):
 #         TS = TiktokScraper()
-#         TS._initialize_browser(use_browser_cookies=True)
-#         videos = TS.get_videos_of_user("microsoft")
+#         await TS._initialize_browser(use_browser_cookies=True)
+#         videos = await TS.get_videos_of_user("microsoft")
 
 #         logger.debug(videos)
 #         logger.debug(videos[0].__dict__)
@@ -57,28 +61,33 @@ logger = logging.getLogger(__name__)
 #                 logger.debug(video.__dict__)    
 
 # class TestVideoDetails(unittest.TestCase):
-#     def test_video_details(self):
+#     async def test_video_details(self):
 #         TS = TiktokScraper()
-#         TS._initialize_browser(use_browser_cookies=True)
+#         await TS._initialize_browser(use_browser_cookies=True)
 #         video_urls = [
 #             "https://www.tiktok.com/@google/video/7333724070804032811",
 #             "https://www.tiktok.com/@google/video/7327746022120099115",
 #             "https://www.tiktok.com/@google/video/7327016920472079662"
 #         ]
-#         videos = TS.get_video_details(video_urls)
+#         videos = await TS.get_video_details(video_urls)
 
 #         logger.debug(videos[0].__dict__)
 #         for video in videos:
 #             self.assertGreater(video.play_count, 100)
 
-# class TestGetTrending(unittest.TestCase):
-#     def test_get_trending_videos(self):
-#         TS = TiktokScraper()
-#         TS._initialize_browser(use_browser_cookies=True)
-#         videos = TS.get_trending_videos()
+class TestGetTrending(unittest.TestCase):
+    @pytest.mark.asyncio
+    async def test_get_trending_videos(self):
+        TS = TiktokScraper()
+        await TS._initialize_browser(use_browser_cookies=True)
+        videos = await TS.get_trending_videos()
+
+        logger.debug("Videos: ", videos)
         
-#         self.assertGreater(len(videos), 0)
-#         self.assertGreater(videos[0].play_count, 10)
+        self.assertGreater(len(videos), 0)
+        self.assertGreater(videos[0].play_count, 10)
+
+        return videos
 
 # class TestGetFollowersForUser(unittest.TestCase):
 #     def test_get_followers(self):
@@ -90,9 +99,9 @@ logger = logging.getLogger(__name__)
 #         self.assertEqual(len(followers), 100)
 
 # class TestGetVideosForKeyword(unittest.TestCase):
-#     def test_get_videos_for_keyword(self):
+#     async def test_get_videos_for_keyword(self):
 #         TS = TiktokScraper()
-#         TS._initialize_browser(use_browser_cookies=True)
-#         videos = TS.get_videos_for_keyword("google", limit=24)
+#         await TS._initialize_browser(use_browser_cookies=True)
+#         videos = await TS.get_videos_for_keyword("google", limit=24)
 
 #         self.assertEqual(len(videos), 24)
