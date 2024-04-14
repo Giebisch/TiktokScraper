@@ -28,7 +28,7 @@ class TiktokScraper():
 
         self.playwright_storage = None
     
-    async def _initialize_browser(self, use_browser_cookies=False) -> None:
+    async def _initialize_browser(self, use_browser_cookies=False, browser="firefox") -> None:
         """Opens browser to initialize context, also used to sign in.
 
         :rtype: None
@@ -37,7 +37,12 @@ class TiktokScraper():
             return
         p = await async_playwright().start()
         if use_browser_cookies:
-            cookies = rookiepy.chrome(["tiktok"])
+            if browser == "firefox":
+                cookies = rookiepy.firefox(["tiktok"])
+            elif browser == "safari":
+                cookies = rookiepy.safari(["tiktok"])
+            else:
+                cookies = rookiepy.chrome(["tiktok"])
             browser = await p.chromium.launch(headless=True)
             formatted_cookies = []
             for cookie in cookies:
